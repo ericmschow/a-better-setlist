@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { DragSource } from 'react-dnd';
-import Container from './Container';
+import DragDropContainer from './DragDropContainer';
 
 // Setlist is an array of Song objects
 // Needs to be an array, as setlists are ordered
@@ -14,13 +14,25 @@ import Container from './Container';
 class Setlist extends Component {
   constructor(props){
     super(props)
-    this.setlist = props.setlist
-    // read from localstorage and get songs
+    this.state = {
+      songsSelected: props.songsSelected,
+      songsStored: props.songsStored,
+    }
   }
   render(){
+    if (this.state.songsSelected.length === 0){
+      return(
+        <div>
+          <p>You haven't selected any songs! Swipe back and click on some to get started.</p>
+        </div>
+      )
+    }
     return(
       <div>
-        <Container setlist={this.setlist}/>
+        <DragDropContainer
+          songsSelected={this.state.songsSelected}
+          songsStored={this.state.songsStored}
+          />
       </div>
     )
   }

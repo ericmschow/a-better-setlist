@@ -9,13 +9,13 @@ const styles = {
     color: '#fff',
   },
   slide1: {
-    background: '#FEA900',
+    background: '#4caf50',
   },
   slide2: {
-    background: '#B3DC4A',
+    background: '#0f0f43',
   },
   slide3: {
-    background: '#6AC0FF',
+    background: '#C15C5C',
   },
 };
 
@@ -56,7 +56,8 @@ class SwipeContainer extends Component {
   render() {
     return (
       <SwipeableViews
-        resistance= 'true'>
+        resistance= 'true'
+        enableMouseEvents='true'>
         <div style={Object.assign({}, styles.slide, styles.slide1)}>
           <h3>Your Songs</h3>
           <p>Tap to select, hold for options!</p>
@@ -67,7 +68,7 @@ class SwipeContainer extends Component {
         <div style={Object.assign({}, styles.slide, styles.slide2)}>
           <h3>Your Setlist</h3>
           <p>Drag to reorder!</p>
-          <Setlist selectedSongs = {this.state.songsSelected}
+          <Setlist songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}/>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>

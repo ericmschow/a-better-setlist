@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import Hammer from 'react-hammerjs'
 // this view has form for creating new song, and a list of all your songs
 // stretch goal = sorting options, default alphabetically
 
@@ -50,13 +50,15 @@ class Songs extends Component {
     // console.log('song 1 is ', this.state.songsStored[1])
   }
 
-  tapSong() {
+  tapSong(song) {
     // on tapping a song, adds SelectedStyle and appends to this.selectedSongs
     // if already SelectedStyle, swap to SongStyle and remove from this.selectedSongs
+    console.log('tapped on ', song)
   }
 
-  longPressSong() {
+  longPressSong(song) {
     // on touching a song, presents options EDIT or DELETE
+    console.log('long pressed ', song)
   }
 
   addSong() {
@@ -72,14 +74,18 @@ class Songs extends Component {
 
   render() {
     let songRenderArray = []
-    this.songs.map((s) => {
+    this.state.songsStored.map((s) => {
       songRenderArray.push(
-        <li style={SongStyle}>
-          <strong>{s.name}</strong>
-          <br/>
+        <Hammer onTap={this.tapSong(s)}
+            onPress={this.longPressSong(s)}
+            >
+          <li style={SongStyle} >
+            <strong>{s.name}</strong>
+            <br/>
 
-          Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
-        </li>
+            Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+          </li>
+        </Hammer>
       )
     })
     return (
