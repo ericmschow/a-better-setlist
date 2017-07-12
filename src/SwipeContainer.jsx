@@ -25,19 +25,19 @@ class SwipeContainer extends Component {
     this.state = {
       songsTest: [
         {
-          id: 1,
+          id: 'apgkrGJfre',
           name: 'Fifteen',
           duration: 5,
           intensity: 6
         } ,
         {
-          id: 2,
+          id: 'KfjeriFvsi',
           name: 'Forest Temple',
           duration: 9,
           intensity: 4
         } ,
         {
-        id: 3,
+        id: 'PfkeUnbmDf',
         name: 'The Complex',
         duration: 7,
         intensity: 5
@@ -47,7 +47,7 @@ class SwipeContainer extends Component {
       songsSelected: [1, 2],
     }
     console.log('songStored is ', this.state.songsStored)
-    // localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
+    //localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
   }
   toUpdateSongsSelected(song){
     let ss = this.state.songsSelected

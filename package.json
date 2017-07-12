@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "rc-slider": "^8.2.0",
     "react": "^15.6.1",
     "react-dnd": "^2.4.0",
     "react-dnd-html5-backend": "^2.4.1",
     "react-dnd-touch-backend": "^0.3.12",
     "react-dom": "^15.6.1",
     "react-modal": "^2.2.2",
+    "react-slider": "^0.8.0",
     "react-swipeable-views": "^0.12.3",
     "react-tap-event-plugin": "^2.0.1",
     "react-tappable": "^1.0.0"
