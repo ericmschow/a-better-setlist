@@ -27,19 +27,19 @@ class SwipeContainer extends Component {
         {
           id: 'apgkrGJfre',
           name: 'Fifteen',
-          duration: 5,
+          duration: 300,
           intensity: 6
         } ,
         {
           id: 'KfjeriFvsi',
           name: 'Forest Temple',
-          duration: 9,
+          duration: 540,
           intensity: 4
         } ,
         {
         id: 'PfkeUnbmDf',
         name: 'The Complex',
-        duration: 7,
+        duration: 420,
         intensity: 5
         }
       ],

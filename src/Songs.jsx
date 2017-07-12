@@ -29,21 +29,22 @@ const SongStyle = {
   borderRadius: 3,
   padding: '0.5rem 1rem',
   marginBottom: '.5rem',
-  backgroundColor: 'white',
+  backgroundColor: '#eee',
   color: 'black',
   listStyleType:'none',
   listStylePosition:'inside',
 };
 
 const SelectedStyle = {
+  border: '1px solid gray',
   borderRadius: 3,
   padding: '0.5rem 1rem',
   marginBottom: '.5rem',
-  backgroundColor: 'lightblue',
+  backgroundColor: 'white',
   color: 'black',
   listStyleType:'none',
   listStylePosition:'inside',
-  boxShadow: "0 0 2px 2px lightblue",
+  boxShadow: "0 0 3px 3px lightblue",
 };
 
 const buttonStyle = {
@@ -96,7 +97,7 @@ class Songs extends Component {
       modalAddIsOpen: false,    // set to false when done testing modal
       modalEditIsOpen: false,
       formSongName: '',
-      formSongDuration: 3,
+      formSongDuration: 200,
       formSongIntensity: 4,
       editSongId: '',
       editSongName: '',
@@ -248,9 +249,18 @@ class Songs extends Component {
       // names must be equal
       return 0;
     });
-    console.log(songsStored)
-    const selectedClasses = "songClass selectedClass"
+    const {editSongDuration, formSongDuration} = this.state;
+    let addMinutes = Math.floor(formSongDuration/60);
+    let addSeconds = (formSongDuration%60).toString()
+    addSeconds = addSeconds.length == 1 ? '0'+addSeconds : addSeconds
+    let editMinutes = Math.floor(editSongDuration/60);
+    let editSeconds = (editSongDuration%60).toString()
+    editSeconds = editSeconds.length == 1 ? '0'+editSeconds : editSeconds
+    console.log('songsStored in songs render is ', songsStored)
     songsStored.map((s) => {
+      let minutes = Math.floor(s.duration/60);
+      let seconds = (s.duration%60).toString()
+      seconds = seconds.length == 1 ? '0'+seconds : seconds
       if (this.state.songsSelected.includes(s.id)) {
         songRenderArray.push(
           <Tappable
@@ -264,7 +274,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+              Length: {minutes}:{seconds} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
             </li>
           </Tappable>
         )
@@ -282,7 +292,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+              Length: {minutes}:{seconds} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
             </li>
           </Tappable>
         )
@@ -312,10 +322,10 @@ class Songs extends Component {
             </label>
             <br/> <br/>
             <label>
-              Duration: {this.state.editSongDuration} minutes
+              Length: {editMinutes}:{editSeconds}
               <Slider
-                min={0} max={20} step={0.5}
-                handle={handle}
+                min={0} max={1500}
+
                 value={this.state.editSongDuration}
 
                 onChange={value => this.handleSliderChange(value, "editSongDuration")}
@@ -371,10 +381,10 @@ class Songs extends Component {
             </label>
             <br/> <br/>
             <label>
-              Duration: {this.state.formSongDuration} minutes
+              Length: {addMinutes}:{addSeconds}
               <Slider
-                min={0} max={20} step={0.5}
-                handle={handle}
+                min={0} max={1500}
+
                 value={this.state.formSongDuration}
 
                 onChange={value => this.handleSliderChange(value, "formSongDuration")}
