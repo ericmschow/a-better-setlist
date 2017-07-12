@@ -18,23 +18,28 @@ class Setlist extends Component {
       songsSelected: props.songsSelected,
       songsStored: props.songsStored,
     }
+    console.log('songStored 1 is ', this.state.songsStored[1])
+    console.log('Setlist component state is ', this.state)
+
   }
   render(){
-    if (this.state.songsSelected.length === 0){
+    if (this.state.songsSelected === 0){
       return(
         <div>
           <p>You haven't selected any songs! Swipe back and click on some to get started.</p>
         </div>
       )
     }
-    return(
-      <div>
-        <DragDropContainer
-          songsSelected={this.state.songsSelected}
-          songsStored={this.state.songsStored}
-          />
-      </div>
-    )
+    else {
+      return (
+        <div>
+          <DragDropContainer
+            songsSelected={this.state.songsSelected}
+            songsStored={this.state.songsStored}
+            />
+        </div>
+      )
+    }
   }
 }
 

@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import Hammer from 'react-hammerjs'
+import Tappable from 'react-tappable';
+import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
+import './Songs.css';
 // this view has form for creating new song, and a list of all your songs
 // stretch goal = sorting options, default alphabetically
 
@@ -37,6 +40,17 @@ const SelectedStyle = {
   boxShadow: "0 0 2px 2px lightblue",
 };
 
+const modalStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  },
+};
+
 class Songs extends Component {
   constructor(props){
     super(props)
@@ -44,11 +58,40 @@ class Songs extends Component {
     this.state = {
       selectedSongs: [], // empty array to be filled with song ids in order selected
       songsStored: props.songsStored,
+      modalIsOpen: false,
+      formSongName: '',
+      formSongDuration: null,
+      formSongIntensity: null,
     }
+    this.openModal = this.openModal.bind(this);
+    this.afterOpenModal = this.afterOpenModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     // console.log("props is ", props)
     // console.log('this.songs is ', this.state.songsStored)
     // console.log('song 1 is ', this.state.songsStored[1])
   }
+
+  openModal() {
+    this.setState({modalIsOpen: true});
+  }
+
+  afterOpenModal() {
+    // references are now sync'd and can be accessed.
+
+  }
+
+  closeModal() {
+    this.setState({modalIsOpen: false});
+  }
+
+  // songTouchStart(song) {
+  //   console.log('started touch on ', song)
+  //   this.updateSetlist(song)
+  // }
+  //
+  // songTouchEnd(song){
+  //   console.log('ended touch on ', song)
+  // }
 
   tapSong(song) {
     // on tapping a song, adds SelectedStyle and appends to this.selectedSongs
@@ -61,10 +104,17 @@ class Songs extends Component {
     console.log('long pressed ', song)
   }
 
+  openAddSongForm() {
+    // called via "Add a new song" li
+  }
+
   addSong() {
+    this.closeModal()
+
     // called via submit button
     // adds song to localStorage
     // sets state
+
   }
 
   editSong() {
@@ -72,38 +122,82 @@ class Songs extends Component {
     // opens song edit form with song info as default
   }
 
+  handleChange(event, key) {
+    this.setState({[key]: event.target.value});
+    console.log(event, this.state[key])
+  }
+
   render() {
     let songRenderArray = []
+    const selectedClasses = "songClass selectedClass"
     this.state.songsStored.map((s) => {
       songRenderArray.push(
-        <Hammer onTap={this.tapSong(s)}
-            onPress={this.longPressSong(s)}
-            >
-          <li style={SongStyle} >
+        <Tappable
+          onTap={(s) => this.tapSong(s)}
+          onPress={(s) => this.longPressSong(s)}>
+          <li
+            key={s.id}
+            style={SongStyle} >
             <strong>{s.name}</strong>
             <br/>
 
             Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
           </li>
-        </Hammer>
+        </Tappable>
       )
     })
     return (
       <div>
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          style={modalStyles}
+          contentLabel="Add Song"
+        >
+
+          <h2>Add Song</h2>
+
+          <form>
+            <label>
+              Song Name:
+              <input type="text"
+                style={{border: "1px solid grey", borderRadius: 2}}
+                value={this.state.formSongName}
+                onChange={event => this.handleChange(event, 'formSongName')} />
+            </label>
+
+          </form>
+          <button
+            style={{
+              border: "1px solid grey",
+              borderRadius: 2,
+              margin: "auto",
+              marginTop: 10,
+            }}
+            onClick={this.addSong}>Add Song</button>
+        </Modal>
+
         <ul style={ListStyle}>
           {songRenderArray}
-          <li style={SelectedStyle}>
+
+          <li className={selectedClasses}>
             <strong>Aura</strong>
             <br/>
 
             Length: 6m <span style={{color: 'blue'}}>|</span> Intensity: 3/7
           </li>
-          <li style={Object.assign({}, SongStyle, {backgroundColor: 'rgba(255, 255, 255, .6)'})}>
-            <strong>Add a new song!</strong>
-            <br/>Press here
-          </li>
+          <Tappable onTap={this.openModal}>
+            <li
+              className="songClass"
+              style={{backgroundColor: 'rgba(255, 255, 255, .6)'}}
+              >
+              <strong>Add a new song!</strong>
+              <br/>Press here
+            </li>
+          </Tappable>
+
         </ul>
-        <button onTouchTap={() => {this.updateSetlist(this.state.selectedSongs)}} value="Sub"/ >
       </div>
     )
   }

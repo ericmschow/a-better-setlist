@@ -1,0 +1,23 @@
+ul {
+  width: 90%;
+  margin: 0;
+  padding: 0;
+  margin: auto;
+  color: black;
+}
+
+.songClass {
+  border: 1px solid gray;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  margin-bottom: .5rem;
+  background-color: white;
+  color: black;
+  list-style-type:none;
+  list-style-position:inside;
+};
+
+.selectedClass {
+  background-color: lightblue;
+  box-shadow: 0 0 2px 2px lightblue;
+}

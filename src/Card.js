@@ -89,12 +89,12 @@ class Card extends Component {
   };
 
   render() {
-    const { text, isDragging, connectDragSource, connectDropTarget } = this.props;
-    const opacity = isDragging ? 0 : 1;
+    const { text, isDragging, connectDragSource, connectDropTarget, index } = this.props;
+    const opacity = isDragging ? .5 : 1;
 
     return connectDragSource(connectDropTarget(
       <div style={{ ...style, opacity }}>
-        {text}
+        {index+1} - {text}
       </div>,
     ));
   }

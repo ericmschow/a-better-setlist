@@ -44,25 +44,27 @@ class SwipeContainer extends Component {
         }
       ],
       songsStored: JSON.parse(localStorage.songs),
-      songsSelected: [],
+      songsSelected: [1, 2],
     }
     console.log('songStored is ', this.state.songsStored)
     // localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
   }
-  toUpdateSongsSelected(songsSelected){
-    this.setState(songsSelected: songsSelected);
-    console.log('SongsSelected Updated: ', this.state.songsSelected)
+  toUpdateSongsSelected(song){
+    let ss = this.state.songsSelected
+    console.log('ss is ',ss)
+    //this.setState({songsSelected: ss.push(song.id)});
+    //console.log('songsSelected Updated: ', this.state.songsSelected)
   }
   render() {
     return (
       <SwipeableViews
-        resistance= 'true'
-        enableMouseEvents='true'>
+        resistance= {true}
+        enableMouseEvents={true}>
         <div style={Object.assign({}, styles.slide, styles.slide1)}>
           <h3>Your Songs</h3>
           <p>Tap to select, hold for options!</p>
           <Songs
-            callbackToUpdateSongsSelected={(songs) => {this.toUpdateSongsSelected}}
+            callbackToUpdateSongsSelected={(song) => {this.toUpdateSongsSelected(song)}}
             songsStored = {this.state.songsStored}/>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide2)}>
