@@ -46,15 +46,25 @@ const SelectedStyle = {
   boxShadow: "0 0 2px 2px lightblue",
 };
 
+const buttonStyle = {
+  border: "3px solid grey",
+  borderRadius: 5,
+  margin: "auto",
+  marginTop: 10,
+  fontSize: "2.5em",
+  position: 'absolute',
+  bottom: 20,
+}
+
 const modalStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '25%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  },
+
+    // top                   : '50%',
+    // left                  : '25%',
+    // right                 : 'auto',
+    // bottom                : 'auto',
+    // marginRight           : '-50%',
+    // transform             : 'translate(-50%, -50%)'
+
 };
 
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
@@ -84,23 +94,45 @@ class Songs extends Component {
       selectedSongs: [], // empty array to be filled with song ids in order selected
       songsStored: props.songsStored,
       modalAddIsOpen: false,    // set to false when done testing modal
+      modalEditIsOpen: false,
       formSongName: '',
       formSongDuration: 3,
       formSongIntensity: 4,
+      editSongId: '',
+      editSongName: '',
+      editSongDuration: '',
+      editSongIntensity: '',
     }
-    this.openModal = this.openModal.bind(this);
+    this.openAddModal = this.openAddModal.bind(this);
     this.closeAddModal = this.closeAddModal.bind(this);
     // console.log("props is ", props)
     console.log('this.songs is ', this.state.songsStored)
     // console.log('song 1 is ', this.state.songsStored[1])
   }
 
-  openModal() {
+  openAddModal() {
     this.setState({modalAddIsOpen: true});
   }
 
   closeAddModal() {
     this.setState({modalAddIsOpen: false});
+  }
+
+  openEditModal(song) {
+    // opens edit modal with selected song as default
+    // will not overwrite partially completed song in Add modal
+    this.setState({
+        oldSong: song,
+        editSongId: song.id,
+        editSongName: song.name,
+        editSongDuration: song.duration,
+        editSongIntensity: song.intensity,
+        modalEditIsOpen: true
+      });
+  }
+
+  closeEditModal() {
+    this.setState({modalEditIsOpen: false});
   }
 
   // songTouchStart(song) {
@@ -116,15 +148,6 @@ class Songs extends Component {
     // on tapping a song, adds SelectedStyle and appends to this.selectedSongs
     // if already SelectedStyle, swap to SongStyle and remove from this.selectedSongs
     console.log('tapped on ', song)
-  }
-
-  longPressSong(song) {
-    // on touching a song, presents options EDIT or DELETE
-    console.log('long pressed ', song)
-  }
-
-  openAddSongForm() {
-    // called via "Add a new song" li
   }
 
   addSong() {
@@ -154,8 +177,39 @@ class Songs extends Component {
   }
 
   editSong() {
-    // called via selecting EDIT in longPressSong
-    // opens song edit form with song info as default
+    var {songsStored} = this.state;
+    let newSong = {
+      id: this.state.editSongId,
+      name: this.state.editSongName,
+      duration: this.state.editSongDuration,
+      intensity: this.state.editSongIntensity,
+    }
+    let index = songsStored.indexOf(this.state.oldSong);
+    console.log('index is ', index)
+    songsStored[index] = newSong;
+    let newState = Object.assign(
+      {},
+      this.state,
+      {songsStored: songsStored},
+      {modalEditIsOpen: false},
+      )
+    this.setState(newState)
+    localStorage.songs = JSON.stringify(songsStored)
+  }
+
+  // stretch goal - add animation
+  deleteSong(){
+    var {songsStored} = this.state;
+    let index=songsStored.indexOf(this.state.oldSong);
+    songsStored.splice(index, 1);
+    let newState = Object.assign(
+      {},
+      this.state,
+      {songsStored: songsStored},
+      {modalEditIsOpen: false},
+      )
+    this.setState(newState)
+    localStorage.songs = JSON.stringify(songsStored)
   }
 
   handleChange(event, key) {
@@ -167,12 +221,29 @@ class Songs extends Component {
 
   render() {
     let songRenderArray = []
+    let {songsStored} = this.state;
+    songsStored = songsStored.sort(function(a, b) {
+      var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+      var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+
+      // names must be equal
+      return 0;
+    });
+    console.log(songsStored)
     const selectedClasses = "songClass selectedClass"
-    this.state.songsStored.map((s) => {
+    songsStored.map((s) => {
       songRenderArray.push(
         <Tappable
+          key={s.id}
+          preventDefault={true}
           onTap={(event) => this.tapSong(s)}
-          onPress={(event) => this.longPressSong(s)}>
+          onPress={(event) => this.openEditModal(s)}>
           <li
             key={s.id}
             style={SongStyle} >
@@ -186,6 +257,63 @@ class Songs extends Component {
     })
     return (
       <div>
+        <Modal
+          isOpen={this.state.modalEditIsOpen}
+          onRequestClose={this.closeEditModal}
+          style={modalStyles}
+          contentLabel="Edit Song"
+          >
+          <h2>Edit Song</h2>
+          <form>
+            <label>
+              Name:
+              <br/>
+              <input type="text"
+                style={{border: "1px solid grey",
+                  borderRadius: 2,
+                  padding: "3px 0",
+                  width: "100%"
+                }}
+                value={this.state.editSongName}
+                onChange={event => this.handleChange(event, 'editSongName')} />
+            </label>
+            <br/> <br/>
+            <label>
+              Duration: {this.state.editSongDuration} minutes
+              <Slider
+                min={0} max={20} step={0.5}
+                handle={handle}
+                value={this.state.editSongDuration}
+
+                onChange={value => this.handleSliderChange(value, "editSongDuration")}
+                />
+            </label>
+            <br/>
+            <label>
+              Intensity: {this.state.editSongIntensity} / 7
+              <Slider
+                min={0} max={7} step={1}
+                handle={handle}
+                value={this.state.editSongIntensity}
+
+                onChange={value => this.handleSliderChange(value, "editSongIntensity")}
+                />
+            </label>
+          </form>
+          <button
+            style={Object.assign({}, buttonStyle, {right: 20})}
+            onClick={()=>this.editSong()}>Save
+          </button>
+          <button
+            style={Object.assign({}, buttonStyle,
+            {color: 'red',left: 20,  border: "3px solid red",})
+            }
+            onClick={()=>this.deleteSong()}>Delete
+          </button>
+        </Modal>
+
+
+
         <Modal
           isOpen={this.state.modalAddIsOpen}
           onRequestClose={this.closeAddModal}
@@ -243,14 +371,7 @@ class Songs extends Component {
 
         <ul style={ListStyle}>
           {songRenderArray}
-
-          <li className={selectedClasses}>
-            <strong>Aura</strong>
-            <br/>
-
-            Length: 6m <span style={{color: 'blue'}}>|</span> Intensity: 3/7
-          </li>
-          <Tappable onTap={this.openModal}>
+          <Tappable onTap={this.openAddModal}>
             <li
               className="songClass"
               style={{backgroundColor: 'rgba(255, 255, 255, .6)'}}
