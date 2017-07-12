@@ -16,12 +16,13 @@ const style = {
 class DragDropContainer extends Component {
   constructor(props) {
     super(props);
-    this.moveCard = this.moveCard.bind(this);
+    // this.moveCard = this.moveCard.bind(this);
 
     this.state = {
       songsSelected: props.songsSelected,
       songsStored: props.songsStored,
-      setlist: [],
+      setlist: props.setlist,
+      moveCard: props.moveCard,
       cards:   [
           {
             id: 1,
@@ -47,35 +48,29 @@ class DragDropContainer extends Component {
           }
         ],
     }
-    let setlist = [];
-    // for (let i = 0; i < this.state.songsSelected.length; i++) {
-    //   setlist.push(this.state.songsStored[this.state.songsSelected[i]])
-    // }
-    this.state.songsSelected.forEach((songid, i, ss) => {
-      setlist.push(this.state.songsStored.find(x => x.id === songid ))
-    })
-    this.state = Object.assign({}, this.state, {setlist: setlist})
+    // this.state.moveCard = this.state.moveCard.bind(this);
+    console.log('movecard is ', this.state.moveCard)
     console.log('dragdrop this setlist is ', this.state.setlist)
     console.log('dragdrop end of constructor state is ', this.state)
   };
 
 
-  moveCard(dragIndex, hoverIndex) {
-    console.log('moveCard beginning state is ', this.state)
-    const { setlist } = this.state;
-    console.log('moveCard songs is ', setlist)
-    const dragCard = setlist[dragIndex];
-
-    this.setState(update(this.state, {
-      setlist: {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, dragCard],
-        ],
-      },
-    }));
-    console.log('State is now ', this.state.setlist)
-  }
+  // moveCard(dragIndex, hoverIndex) {
+  //   console.log('moveCard beginning state is ', this.state)
+  //   const { setlist } = this.state;
+  //   console.log('moveCard songs is ', setlist)
+  //   const dragCard = setlist[dragIndex];
+  //
+  //   this.setState(update(this.state, {
+  //     setlist: {
+  //       $splice: [
+  //         [dragIndex, 1],
+  //         [hoverIndex, 0, dragCard],
+  //       ],
+  //     },
+  //   }));
+  //   console.log('State is now ', this.state.setlist)
+  // }
 
   render() {
     const { setlist } = this.state;
@@ -90,7 +85,7 @@ class DragDropContainer extends Component {
             text={song.name}
             duration={song.duration}
             intensity={song.intensity}
-            moveCard={this.moveCard}
+            moveCard={this.state.moveCard}
           />
         ))}
       </div>

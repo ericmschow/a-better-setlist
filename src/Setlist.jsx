@@ -17,6 +17,7 @@ class Setlist extends Component {
     this.state = {
       songsSelected: props.songsSelected,
       songsStored: props.songsStored,
+      setlist: props.setlist,
     }
     console.log('songsSelected in setlist is ', this.state.songsSelected)
     console.log('songStored 1 is ', this.state.songsStored[1])
@@ -35,8 +36,10 @@ class Setlist extends Component {
       return (
         <div>
           <DragDropContainer
+            moveCard={this.props.moveCard}
             songsSelected={this.state.songsSelected}
             songsStored={this.state.songsStored}
+            setlist={this.state.setlist}
             />
         </div>
       )

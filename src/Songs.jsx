@@ -245,8 +245,6 @@ class Songs extends Component {
       if (nameA > nameB) {
         return 1;
       }
-
-      // names must be equal
       return 0;
     });
     const {editSongDuration, formSongDuration} = this.state;
@@ -256,7 +254,7 @@ class Songs extends Component {
     let editMinutes = Math.floor(editSongDuration/60);
     let editSeconds = (editSongDuration%60).toString()
     editSeconds = editSeconds.length == 1 ? '0'+editSeconds : editSeconds
-    console.log('songsStored in songs render is ', songsStored)
+    //console.log('songsStored in songs render is ', songsStored)
     songsStored.map((s) => {
       let minutes = Math.floor(s.duration/60);
       let seconds = (s.duration%60).toString()
