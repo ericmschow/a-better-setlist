@@ -48,9 +48,12 @@ class DragDropContainer extends Component {
         ],
     }
     let setlist = [];
-    for (let i = 0; i < this.state.songsSelected.length; i++) {
-      setlist.push(this.state.songsStored[this.state.songsSelected[i]])
-    }
+    // for (let i = 0; i < this.state.songsSelected.length; i++) {
+    //   setlist.push(this.state.songsStored[this.state.songsSelected[i]])
+    // }
+    this.state.songsSelected.forEach((songid, i, ss) => {
+      setlist.push(this.state.songsStored.find(x => x.id === songid ))
+    })
     this.state = Object.assign({}, this.state, {setlist: setlist})
     console.log('dragdrop this setlist is ', this.state.setlist)
     console.log('dragdrop end of constructor state is ', this.state)

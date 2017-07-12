@@ -18,6 +18,7 @@ class Setlist extends Component {
       songsSelected: props.songsSelected,
       songsStored: props.songsStored,
     }
+    console.log('songsSelected in setlist is ', this.state.songsSelected)
     console.log('songStored 1 is ', this.state.songsStored[1])
     console.log('Setlist component state is ', this.state)
 

@@ -91,7 +91,7 @@ class Songs extends Component {
     super(props)
     this.updateSetlist = props.callbackToUpdateSongsSelected
     this.state = {
-      selectedSongs: [], // empty array to be filled with song ids in order selected
+      songsSelected: props.songsSelected, // empty array to be filled with song ids in order selected
       songsStored: props.songsStored,
       modalAddIsOpen: false,    // set to false when done testing modal
       modalEditIsOpen: false,
@@ -105,6 +105,8 @@ class Songs extends Component {
     }
     this.openAddModal = this.openAddModal.bind(this);
     this.closeAddModal = this.closeAddModal.bind(this);
+    this.openEditModal = this.openEditModal.bind(this);
+    this.closeEditModal = this.closeEditModal.bind(this);
     // console.log("props is ", props)
     console.log('this.songs is ', this.state.songsStored)
     // console.log('song 1 is ', this.state.songsStored[1])
@@ -145,9 +147,20 @@ class Songs extends Component {
   // }
 
   tapSong(song) {
-    // on tapping a song, adds SelectedStyle and appends to this.selectedSongs
-    // if already SelectedStyle, swap to SongStyle and remove from this.selectedSongs
+    const {songsSelected} = this.state;
+    // on tapping a song, adds SelectedStyle and appends to this.songsSelected
+    // if already SelectedStyle, swap to SongStyle and remove from this.songsSelected
     console.log('tapped on ', song)
+    let newSongs = songsSelected
+    if (songsSelected.includes(song.id)){
+      let index = songsSelected.indexOf(song.id)
+      newSongs.splice(index, 1);
+
+    }
+    else {
+      newSongs.push(song.id)
+    }
+    this.updateSetlist(newSongs)
   }
 
   addSong() {
@@ -238,22 +251,42 @@ class Songs extends Component {
     console.log(songsStored)
     const selectedClasses = "songClass selectedClass"
     songsStored.map((s) => {
-      songRenderArray.push(
-        <Tappable
-          key={s.id}
-          preventDefault={true}
-          onTap={(event) => this.tapSong(s)}
-          onPress={(event) => this.openEditModal(s)}>
-          <li
+      if (this.state.songsSelected.includes(s.id)) {
+        songRenderArray.push(
+          <Tappable
             key={s.id}
-            style={SongStyle} >
-            <strong>{s.name}</strong>
-            <br/>
+            preventDefault={true}
+            onTap={(event) => this.tapSong(s)}
+            onPress={(event) => this.openEditModal(s)}>
+            <li
+              key={s.id}
+              style={SelectedStyle} >
+              <strong>{s.name}</strong>
+              <br/>
 
-            Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
-          </li>
-        </Tappable>
-      )
+              Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+            </li>
+          </Tappable>
+        )
+      }
+      else{
+        songRenderArray.push(
+          <Tappable
+            key={s.id}
+            preventDefault={true}
+            onTap={(event) => this.tapSong(s)}
+            onPress={(event) => this.openEditModal(s)}>
+            <li
+              key={s.id}
+              style={SongStyle} >
+              <strong>{s.name}</strong>
+              <br/>
+
+              Length: {s.duration}m <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+            </li>
+          </Tappable>
+        )
+      }
     })
     return (
       <div>
