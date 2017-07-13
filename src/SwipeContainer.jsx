@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import Setlist from './Setlist.jsx'
 import Songs from './Songs.jsx'
+import Chart from './Graphs.jsx'
 const styles = {
   slide: {
     padding: 15,
@@ -47,13 +48,13 @@ class SwipeContainer extends Component {
       songsSelected: [],
     }
     // this.state.songsSelected = [this.state.songsTest[1].id, this.state.songsTest[2].id]  // uncomment to add selected
-    console.log('songStored is ', this.state.songsStored)
+    // console.log('songStored is ', this.state.songsStored)
     //localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
   }
   toUpdateSongsSelected(newSongs){
     this.setState({songsSelected: newSongs})
     //this.setState({songsSelected: ss.push(song.id)});
-    console.log('songsSelected in SwipeContainer Updated: ', this.state.songsSelected)
+    // console.log('songsSelected in SwipeContainer Updated: ', this.state.songsSelected)
   }
   render() {
     return (
@@ -75,6 +76,9 @@ class SwipeContainer extends Component {
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>
           <h3>Your Graphs</h3>
+          <Chart
+            songsSelected = {this.state.songsSelected}
+            songsStored = {this.state.songsStored}/>
         </div>
       </SwipeableViews>
     )
