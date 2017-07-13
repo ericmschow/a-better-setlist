@@ -21,9 +21,11 @@ Stretch goals include:
 * Automatic setlist re-ordering, including randomly or in accordance with a given intensity or response curve
 * Allow the user to have multiple bands
 * Allow saving/loading different setlists
-* Refactor into React Native or some other means of putting
+* Refactor into React Native or some other means of putting this on app stores
 
 Some challenges faced while building this project included:
 * Overcoming react-swipeable-views' behavior of re-rendering every component on every frame of animation, when computationally heavy logic needed to be done prior to re-rendering. Solved via debounce module on the heavy logic, preventing it from running that frequently.
 
 * Finding a way to take touch input on individual divs while react-swipeable-views wanted to take touch input on the entire screen. Solved via finding a different touch module, Tappable, that worked at a higher priority than react-swipeable-views.
+
+* More to come, certainly.
