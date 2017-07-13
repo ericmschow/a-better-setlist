@@ -85,16 +85,17 @@ class Card extends Component {
     isDragging: PropTypes.bool.isRequired,
     id: PropTypes.any.isRequired,
     text: PropTypes.string.isRequired,
+    durString: PropTypes.string.isRequired,
     moveCard: PropTypes.func.isRequired,
   };
 
   render() {
-    const { text, isDragging, connectDragSource, connectDropTarget, index } = this.props;
+    const { text, isDragging, connectDragSource, connectDropTarget, index, durString } = this.props;
     const opacity = isDragging ? .5 : 1;
 
     return connectDragSource(connectDropTarget(
       <div style={{ ...style, opacity }}>
-        {index+1} - {text} 
+        {index+1} - {text} - {durString}
       </div>,
     ));
   }

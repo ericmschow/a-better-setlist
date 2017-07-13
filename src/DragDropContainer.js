@@ -83,36 +83,30 @@ class DragDropContainer extends Component {
   updateSetlist(){
     let setlist = [];
     this.state.songsSelected.forEach((songid, i, ss) => {
-      console.log('ss foreach songid: ', i, songid)
+      // console.log('ss foreach songid: ', i, songid)
       setlist.push(this.state.songsStored.find(x => x.id === songid ))
     })
     this.setState({setlist: setlist})
-    console.log('setlist updated')
+    // console.log('setlist updated')
     let totalDuration = 0
     setlist.forEach((song)=> {
       totalDuration += song.duration
     })
-    console.log('total duration is ', totalDuration)
+    // console.log('total duration is ', totalDuration)
     this.props.callbackToUpdateDur(totalDuration)
     // this.state = Object.assign({}, this.state, {setlist: setlist})
   }
 
   deb = debounce(this.updateSetlist, 250, true)
-
   componentWillReceiveProps(){
-    console.log('DDC will receive props')
-    // let deb = debounce(this.updateSetlist, 500, true)
     this.deb();
   }
 
   render() {
-
-    debounce(()=>{console.log('debounced'), 100})
     const { songsStored, songsSelected, setlist } = this.state;
-
     // const { songsStored, songsSelected} = this.state;
     // console.log('songsSelected in DDC render is ', songsSelected)
-    console.log('ddc render setlist ', setlist)
+    // console.log('ddc render setlist ', setlist)
     return (
       <div style={style}>
         {setlist.map((song, i) => (
@@ -122,6 +116,7 @@ class DragDropContainer extends Component {
             id={song.id}
             text={song.name}
             duration={song.duration}
+            durString={song.durString}
             intensity={song.intensity}
             moveCard={this.moveCard}
           />

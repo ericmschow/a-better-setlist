@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 // import { DragSource } from 'react-dnd';
 import DragDropContainer from './DragDropContainer';
-
+import './Setlist.css'
 // Setlist is an array of Song objects
 // Needs to be an array, as setlists are ordered
 // Songs have:
@@ -18,6 +18,19 @@ const setlistNameStyle = {
   border: 'none',
   color: '#fff',
 }
+const setlistFieldStyle = {
+  fontSize:'1em',
+  marginTop: 5,
+  width: '90%',
+  textAlign: 'justified',
+  backgroundColor: "rgba(120, 120, 120, .6)",
+  border: 'none',
+  color: '#fff',
+}
+// export function Notes() {
+//     return(
+//             )
+//   }
 
 class Setlist extends Component {
   constructor(props){
@@ -27,6 +40,7 @@ class Setlist extends Component {
       songsStored: props.songsStored,
       setlistName: 'Your Setlist',
       setlistDuration: null,
+      setlistNotes: 'People/bands to thank: ',
     }
     // console.log('songsSelected in setlist is ', this.state.songsSelected)
     // console.log('songStored 1 is ', this.state.songsStored[1])
@@ -63,6 +77,15 @@ class Setlist extends Component {
           <div style={{margin: "1em"}}>
             <p>You haven't selected any songs!<br/><br/> Swipe back and click on some to get started.</p>
           </div>
+          <div id="setlistNotes">
+            <label>Notes:</label>
+            <textarea
+                      style={setlistFieldStyle}
+                      value={this.state.setlistNotes}
+                      onChange={event => this.handleChange(event, 'setlistNotes')}
+                      rows={4}
+                      />
+          </div>
         </div>
       )
     }
@@ -76,11 +99,22 @@ class Setlist extends Component {
             />
           <p>Total length: {this.convertDurToString(this.state.setlistDuration)}</p>
           <p>Drag to reorder!</p>
-          <DragDropContainer
-            songsSelected={this.state.songsSelected}
-            songsStored={this.state.songsStored}
-            callbackToUpdateDur={(dur)=>this.updateSetlistDuration(dur)}
-            />
+          <div id="dragDropDiv">
+            <DragDropContainer
+              songsSelected={this.state.songsSelected}
+              songsStored={this.state.songsStored}
+              callbackToUpdateDur={(dur)=>this.updateSetlistDuration(dur)}
+              />
+          </div>
+          <div id="setlistNotes">
+            <label>Notes:</label>
+            <textarea
+                      style={setlistFieldStyle}
+                      value={this.state.setlistNotes}
+                      onChange={event => this.handleChange(event, 'setlistNotes')}
+                      rows={4}
+                      />
+          </div>
         </div>
       )
     }
