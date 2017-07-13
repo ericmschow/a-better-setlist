@@ -94,7 +94,7 @@ class Card extends Component {
 
     return connectDragSource(connectDropTarget(
       <div style={{ ...style, opacity }}>
-        {index+1} - {text}
+        {index+1} - {text} 
       </div>,
     ));
   }

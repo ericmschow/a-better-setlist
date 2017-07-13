@@ -17,7 +17,7 @@ var apikey = require("apikeygen").apikey;
 
 const ListStyle = {
   width: '90%',
-  
+
   padding: 0,
   margin: 'auto',
   color: 'black',
@@ -138,6 +138,14 @@ class Songs extends Component {
     this.setState({modalEditIsOpen: false});
   }
 
+  convertDurToString(input){
+    let minutes = Math.floor(input/60);
+    let seconds = (input%60).toString()
+    seconds = seconds.length == 1 ? '0'+seconds : seconds
+    let durString = minutes.toString() + ":" + seconds
+    return durString
+  }
+
   tapSong(song) {
     const {songsSelected} = this.state;
     // on tapping a song, adds SelectedStyle and appends to this.songsSelected
@@ -162,6 +170,7 @@ class Songs extends Component {
       name: this.state.formSongName,
       duration: this.state.formSongDuration,
       intensity: this.state.formSongIntensity,
+      durString: this.convertDurToString(this.state.formSongDuration),
     }
     songsStored.push(newSong)
     let newState = Object.assign(
@@ -188,6 +197,7 @@ class Songs extends Component {
       name: this.state.editSongName,
       duration: this.state.editSongDuration,
       intensity: this.state.editSongIntensity,
+      durString: this.convertDurToString(this.state.editSongDuration),
     }
     let index = songsStored.indexOf(this.state.oldSong);
     // console.log('index is ', index)
@@ -249,9 +259,7 @@ class Songs extends Component {
     editSeconds = editSeconds.length == 1 ? '0'+editSeconds : editSeconds
     // console.log('songsStored in songs render is ', songsStored)
     songsStored.map((s) => {
-      let minutes = Math.floor(s.duration/60);
-      let seconds = (s.duration%60).toString()
-      seconds = seconds.length == 1 ? '0'+seconds : seconds
+
       if (this.state.songsSelected.includes(s.id)) {
         songRenderArray.push(
           <Tappable
@@ -265,7 +273,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {minutes}:{seconds} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+              Length: {s.durString} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
             </li>
           </Tappable>
         )
@@ -283,7 +291,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {minutes}:{seconds} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+              Length: {s.durString} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
             </li>
           </Tappable>
         )

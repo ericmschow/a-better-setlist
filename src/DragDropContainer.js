@@ -88,6 +88,12 @@ class DragDropContainer extends Component {
     })
     this.setState({setlist: setlist})
     console.log('setlist updated')
+    let totalDuration = 0
+    setlist.forEach((song)=> {
+      totalDuration += song.duration
+    })
+    console.log('total duration is ', totalDuration)
+    this.props.callbackToUpdateDur(totalDuration)
     // this.state = Object.assign({}, this.state, {setlist: setlist})
   }
 
