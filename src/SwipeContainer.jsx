@@ -46,15 +46,14 @@ class SwipeContainer extends Component {
       songsStored: JSON.parse(localStorage.songs),
       songsSelected: [],
     }
-    this.state.songsSelected = [this.state.songsTest[1].id, this.state.songsTest[2].id]
+    // this.state.songsSelected = [this.state.songsTest[1].id, this.state.songsTest[2].id]  // uncomment to add selected
     console.log('songStored is ', this.state.songsStored)
     //localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
   }
   toUpdateSongsSelected(newSongs){
     this.setState({songsSelected: newSongs})
-
     //this.setState({songsSelected: ss.push(song.id)});
-    console.log('songsSelected Updated: ', this.state.songsSelected)
+    console.log('songsSelected in SwipeContainer Updated: ', this.state.songsSelected)
   }
   render() {
     return (
@@ -70,8 +69,7 @@ class SwipeContainer extends Component {
             songsSelected = {this.state.songsSelected}/>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide2)}>
-          <h3>Your Setlist</h3>
-          <p>Drag to reorder!</p>
+
           <Setlist songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}/>
         </div>

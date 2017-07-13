@@ -4,6 +4,7 @@ import { DragDropContext } from 'react-dnd';
 // import HTML5Backend from 'react-dnd-html5-backend';
 import { default as TouchBackend } from 'react-dnd-touch-backend';
 import Card from './Card';
+var debounce = require('debounce')
 
 
 const style = {
@@ -47,23 +48,25 @@ class DragDropContainer extends Component {
           }
         ],
     }
-    let setlist = [];
     // for (let i = 0; i < this.state.songsSelected.length; i++) {
     //   setlist.push(this.state.songsStored[this.state.songsSelected[i]])
     // }
-    this.state.songsSelected.forEach((songid, i, ss) => {
-      setlist.push(this.state.songsStored.find(x => x.id === songid ))
-    })
-    this.state = Object.assign({}, this.state, {setlist: setlist})
-    console.log('dragdrop this setlist is ', this.state.setlist)
-    console.log('dragdrop end of constructor state is ', this.state)
+
+    // let setlist=[];
+    // this.state.songsSelected.forEach((songid, i, ss) => {
+    //   setlist.push(this.state.songsStored.find(x => x.id === songid ))
+    // })
+    // this.state = Object.assign({}, this.state, {setlist: setlist})
+
+    //console.log('dragdrop this setlist is ', this.state.setlist)
+    // console.log('dragdrop end of constructor state is ', this.state)
   };
 
 
   moveCard(dragIndex, hoverIndex) {
-    console.log('moveCard beginning state is ', this.state)
+    // console.log('moveCard beginning state is ', this.state)
     const { setlist } = this.state;
-    console.log('moveCard songs is ', setlist)
+    // console.log('moveCard songs is ', setlist)
     const dragCard = setlist[dragIndex];
 
     this.setState(update(this.state, {
@@ -74,12 +77,36 @@ class DragDropContainer extends Component {
         ],
       },
     }));
-    console.log('State is now ', this.state.setlist)
+    // console.log('State after moveCard is now ', this.state.setlist)
+  }
+
+  updateSetlist(){
+    let setlist = [];
+    this.state.songsSelected.forEach((songid, i, ss) => {
+      console.log('ss foreach songid: ', i, songid)
+      setlist.push(this.state.songsStored.find(x => x.id === songid ))
+    })
+    this.setState({setlist: setlist})
+    console.log('setlist updated')
+    // this.state = Object.assign({}, this.state, {setlist: setlist})
+  }
+
+  deb = debounce(this.updateSetlist, 250, true)
+
+  componentWillReceiveProps(){
+    console.log('DDC will receive props')
+    // let deb = debounce(this.updateSetlist, 500, true)
+    this.deb();
   }
 
   render() {
-    const { setlist } = this.state;
 
+    debounce(()=>{console.log('debounced'), 100})
+    const { songsStored, songsSelected, setlist } = this.state;
+
+    // const { songsStored, songsSelected} = this.state;
+    // console.log('songsSelected in DDC render is ', songsSelected)
+    console.log('ddc render setlist ', setlist)
     return (
       <div style={style}>
         {setlist.map((song, i) => (

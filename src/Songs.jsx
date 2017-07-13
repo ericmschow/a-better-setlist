@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Tappable from 'react-tappable';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import './Songs.css';
 import Slider from 'rc-slider';
@@ -17,7 +17,7 @@ var apikey = require("apikeygen").apikey;
 
 const ListStyle = {
   width: '90%',
-  margin: 0,
+  
   padding: 0,
   margin: 'auto',
   color: 'black',
@@ -109,7 +109,7 @@ class Songs extends Component {
     this.openEditModal = this.openEditModal.bind(this);
     this.closeEditModal = this.closeEditModal.bind(this);
     // console.log("props is ", props)
-    console.log('this.songs is ', this.state.songsStored)
+    // console.log('this.songs is ', this.state.songsStored)
     // console.log('song 1 is ', this.state.songsStored[1])
   }
 
@@ -138,20 +138,11 @@ class Songs extends Component {
     this.setState({modalEditIsOpen: false});
   }
 
-  // songTouchStart(song) {
-  //   console.log('started touch on ', song)
-  //   this.updateSetlist(song)
-  // }
-  //
-  // songTouchEnd(song){
-  //   console.log('ended touch on ', song)
-  // }
-
   tapSong(song) {
     const {songsSelected} = this.state;
     // on tapping a song, adds SelectedStyle and appends to this.songsSelected
     // if already SelectedStyle, swap to SongStyle and remove from this.songsSelected
-    console.log('tapped on ', song)
+    // console.log('tapped on ', song)
     let newSongs = songsSelected
     if (songsSelected.includes(song.id)){
       let index = songsSelected.indexOf(song.id)
@@ -199,7 +190,7 @@ class Songs extends Component {
       intensity: this.state.editSongIntensity,
     }
     let index = songsStored.indexOf(this.state.oldSong);
-    console.log('index is ', index)
+    // console.log('index is ', index)
     songsStored[index] = newSong;
     let newState = Object.assign(
       {},
@@ -256,7 +247,7 @@ class Songs extends Component {
     let editMinutes = Math.floor(editSongDuration/60);
     let editSeconds = (editSongDuration%60).toString()
     editSeconds = editSeconds.length == 1 ? '0'+editSeconds : editSeconds
-    console.log('songsStored in songs render is ', songsStored)
+    // console.log('songsStored in songs render is ', songsStored)
     songsStored.map((s) => {
       let minutes = Math.floor(s.duration/60);
       let seconds = (s.duration%60).toString()
