@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
 import SwipeableViews from 'react-swipeable-views';
+import Tabs, { Tab } from 'material-ui/Tabs';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {indigo400} from 'material-ui/styles/colors'
 import Setlist from './Setlist.jsx'
 import Songs from './Songs.jsx'
 import Chart from './Graphs.jsx'
+import Tappable from 'react-tappable'
 const styles = {
   slide: {
     padding: 15,
@@ -40,6 +45,16 @@ const styles = {
   },
 };
 
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: indigo400,
+        primary2Color: indigo400,
+        primary3Color: indigo400,
+        accent1Color: indigo400,
+        pickerHeaderColor: indigo400,
+    },
+});
+
 class SwipeContainer extends Component {
   constructor(props){
     super(props);
@@ -66,22 +81,46 @@ class SwipeContainer extends Component {
       ],
       songsStored: JSON.parse(localStorage.songs),
       songsSelected: [],
+      index: 0,
     }
     // this.state.songsSelected = [this.state.songsTest[1].id, this.state.songsTest[2].id]  // uncomment to add selected
     // console.log('songStored is ', this.state.songsStored)
     //localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
+  }
+  componentDidUpdate(){
+    console.log('swipecontainer index is ', this.state.index)
   }
   toUpdateSongsSelected(newSongs){
     this.setState({songsSelected: newSongs})
     //this.setState({songsSelected: ss.push(song.id)});
     // console.log('songsSelected in SwipeContainer Updated: ', this.state.songsSelected)
   }
-  render() {
-    return (
-      <div>
-                <div style={styles.chartBackground}></div>
 
+  handleChange = (value) => {
+    console.log('handleChange args:', arguments)
+    this.setState({
+      index: value,
+    });
+  };
+
+  handleChangeIndex = (index) => {
+    this.setState({
+      index: index,
+    });
+  };
+
+  render() {
+    const {index} = this.state
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}><div>
+        <Tabs value={index} fullWidth onChange={this.handleChange}>
+          <Tab label="SONGS" value={0}/>
+          <Tab label="SETLIST" value={1}/>
+          <Tab label="GRAPHS" value={2}/>
+        </Tabs>
       <SwipeableViews
+        index={index}
+        onChangeIndex={this.handleChangeIndex}
         resistance= {true}
         enableMouseEvents={true}>
 
@@ -102,15 +141,13 @@ class SwipeContainer extends Component {
           </div>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>
-
           <h3>Your Graphs</h3>
           <Chart
             songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}/>
-
         </div>
       </SwipeableViews>
-            </div>
+      </div></MuiThemeProvider>
     )
   }
 }
