@@ -26,6 +26,10 @@ const setlistFieldStyle = {
   backgroundColor: "rgba(120, 120, 120, .6)",
   border: 'none',
   color: '#fff',
+  position: 'absolute',
+  bottom: '10%',
+  right: '5%'
+
 }
 // export function Notes() {
 //     return(
@@ -63,6 +67,10 @@ class Setlist extends Component {
 
   handleChange(event, key) {
     this.setState({[key]: event.target.value});
+  }
+
+  getSetlist(setlist){
+    this.callbackWithSetlist(setlist);
   }
 
   render(){

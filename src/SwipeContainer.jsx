@@ -8,15 +8,35 @@ const styles = {
     padding: 15,
     height: '100vh',
     color: '#fff',
+    borderLeft: "1px solid #333",
+    borderRight: "1px solid #333",
   },
   slide1: {
-    background: '#4caf50',
+    background: "#cc3350 url('/img/stage_empty.jpeg') no-repeat fixed",
+    // backgroundSize: "auto 125%",
+    backgroundSize: 'cover',
+    backgroundPosition: "-35vw 5vh"
   },
   slide2: {
-    background: '#0f0f43',
+    background: "#00ff00",
+    background: "#00ff00 url('/img/stage_rainbow.jpeg') no-repeat fixed",
+    // backgroundSize: "auto 125%",
+    backgroundPosition: "0vw center",
+    backgroundSize: 'cover',
   },
   slide3: {
-    background: '#C15C5C',
+    background: "#0000ff",
+    background: "#0000ff url('/img/mixer1.jpeg') no-repeat fixed",
+    // backgroundSize: "auto 125%",
+    backgroundSize: 'cover',
+    backgroundPosition: "150vw center",
+  },
+  chartBackground: {
+    // background: "url('/img/mixer2.jpeg') no-repeat fixed",
+    // backgroundSize: "cover",
+    // marginLeft: "-50%",
+    // transform: "translate(-200%, 0px)",
+    // height: '100vh',
   },
 };
 
@@ -58,9 +78,13 @@ class SwipeContainer extends Component {
   }
   render() {
     return (
+      <div>
+                <div style={styles.chartBackground}></div>
+
       <SwipeableViews
         resistance= {true}
         enableMouseEvents={true}>
+
         <div style={Object.assign({}, styles.slide, styles.slide1)}>
           <h3>Your Songs</h3>
           <p>Tap to select, hold for options!</p>
@@ -70,17 +94,23 @@ class SwipeContainer extends Component {
             songsSelected = {this.state.songsSelected}/>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide2)}>
-
-          <Setlist songsSelected = {this.state.songsSelected}
+          <div style={styles.chartBackground}>
+            <div >
+              <Setlist songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}/>
+            </div>
+          </div>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>
+
           <h3>Your Graphs</h3>
           <Chart
             songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}/>
+
         </div>
       </SwipeableViews>
+            </div>
     )
   }
 }

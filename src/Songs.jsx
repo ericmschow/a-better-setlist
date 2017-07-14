@@ -29,7 +29,7 @@ const SongStyle = {
   borderRadius: 3,
   padding: '0.5rem 1rem',
   marginBottom: '.5rem',
-  backgroundColor: '#eee',
+  backgroundColor: 'rgba(256, 256, 256, .8)',
   color: 'black',
   listStyleType:'none',
   listStylePosition:'inside',

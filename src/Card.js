@@ -10,7 +10,7 @@ const style = {
   borderRadius: 3,
   padding: '0.5rem 1rem',
   marginBottom: '.5rem',
-  backgroundColor: 'white',
+  backgroundColor: 'rgba(256, 256, 256, 0.8)',
   cursor: 'move',
 };
 
