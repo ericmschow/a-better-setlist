@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "d3": "^3.5.17",
+    "d3-array": "^0.8.1",
+    "d3-scale": "^0.9.3",
+    "d3-shape": "^0.7.1",
+    "d3-time-format": "^2.0.5",
     "debounce": "^1.0.2",
     "rc-slider": "^8.2.0",
     "react": "^15.6.1",
@@ -10,11 +15,14 @@
     "react-dnd-html5-backend": "^2.4.1",
     "react-dnd-touch-backend": "^0.3.12",
     "react-dom": "^15.6.1",
+    "react-easy-chart": "^0.1.13",
+    "react-faux-dom": "^2.7.1",
     "react-modal": "^2.2.2",
     "react-slider": "^0.8.0",
     "react-swipeable-views": "^0.12.3",
     "react-tap-event-plugin": "^2.0.1",
-    "react-tappable": "^1.0.0"
+    "react-tappable": "^1.0.0",
+    "recharts": "^1.0.0-alpha.2"
   },
   "devDependencies": {
     "react-scripts": "1.0.10"

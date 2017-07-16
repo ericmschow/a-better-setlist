@@ -1,18 +1,43 @@
 .App {
   text-align: center;
   height: 100vh;
+  background-color: #222;
 }
 
 .App-header {
   background-color: #222;
+  background: url("/img/crowd1.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center -13vh;
+  border-bottom: 2px solid #333;
   top: 0;
   left: 0;
   right: 0;
-  height: 50px;
-  padding: 20px;
-  color: white;
+  height: 100px;
+  padding: 0px;
+  font-size: 2em;
+  font-family: cursive;
+  color: #333;
 }
 
-.App-intro {
-  font-size: large;
+.App-header ul {
+  z-index: 10000;
+  color: #333;
+  font-size: 1rem;
+  margin: auto;
+  padding: 0;
+}
+
+.App-header li {
+  width: 30%;
+  background-color: rgba(255, 255, 255, .6);
+  border: 1px solid #333;
+  display: inline-block;
+  margin:auto;
+}
+
+.App-header h2 {
+  /*padding: 10px;*/
+  margin: 0;
 }

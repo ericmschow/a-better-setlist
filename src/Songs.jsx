@@ -29,7 +29,7 @@ const SongStyle = {
   borderRadius: 3,
   padding: '0.5rem 1rem',
   marginBottom: '.5rem',
-  backgroundColor: '#eee',
+  backgroundColor: 'rgba(256, 256, 256, .7)',
   color: 'black',
   listStyleType:'none',
   listStylePosition:'inside',
@@ -237,6 +237,8 @@ class Songs extends Component {
   render() {
     let songRenderArray = []
     let {songsStored} = this.state;
+    // sort songs alphabetically
+    // extra sort options as stretch goal
     songsStored = songsStored.sort(function(a, b) {
       var nameA = a.name.toUpperCase(); // ignore upper and lowercase
       var nameB = b.name.toUpperCase(); // ignore upper and lowercase
@@ -246,20 +248,10 @@ class Songs extends Component {
       if (nameA > nameB) {
         return 1;
       }
-
-      // names must be equal
       return 0;
     });
-    const {editSongDuration, formSongDuration} = this.state;
-    let addMinutes = Math.floor(formSongDuration/60);
-    let addSeconds = (formSongDuration%60).toString()
-    addSeconds = addSeconds.length == 1 ? '0'+addSeconds : addSeconds
-    let editMinutes = Math.floor(editSongDuration/60);
-    let editSeconds = (editSongDuration%60).toString()
-    editSeconds = editSeconds.length == 1 ? '0'+editSeconds : editSeconds
-    // console.log('songsStored in songs render is ', songsStored)
     songsStored.map((s) => {
-
+      // if song has been tapped on, render with SelectedStyle
       if (this.state.songsSelected.includes(s.id)) {
         songRenderArray.push(
           <Tappable
@@ -273,7 +265,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {s.durString} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+              Length: {s.durString} | Intensity: {s.intensity}/7
             </li>
           </Tappable>
         )
@@ -291,7 +283,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {s.durString} <span style={{color: 'blue'}}>|</span> Intensity: {s.intensity}/7
+              Length: {s.durString} | Intensity: {s.intensity}/7
             </li>
           </Tappable>
         )
@@ -321,7 +313,7 @@ class Songs extends Component {
             </label>
             <br/> <br/>
             <label>
-              Length: {editMinutes}:{editSeconds}
+              Length: {this.convertDurToString(this.state.editSongDuration)}
               <Slider
                 min={0} max={1500}
 
@@ -380,12 +372,10 @@ class Songs extends Component {
             </label>
             <br/> <br/>
             <label>
-              Length: {addMinutes}:{addSeconds}
+              Length: {this.convertDurToString(this.state.formSongDuration)}
               <Slider
                 min={0} max={1500}
-
                 value={this.state.formSongDuration}
-
                 onChange={value => this.handleSliderChange(value, "formSongDuration")}
                 />
             </label>
@@ -396,7 +386,6 @@ class Songs extends Component {
                 min={0} max={7} step={1}
                 handle={handle}
                 value={this.state.formSongIntensity}
-
                 onChange={value => this.handleSliderChange(value, "formSongIntensity")}
                 />
             </label>
