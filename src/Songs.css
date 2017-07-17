@@ -11,7 +11,7 @@ ul {
   border-radius: 3px;
   padding: 0.5rem 1rem;
   margin-bottom: .5rem;
-  background-color: white;
+  background-color: rgba(255, 255, 255, .5);
   color: black;
   list-style-type:none;
   list-style-position:inside;
@@ -20,4 +20,16 @@ ul {
 .selectedClass {
   background-color: lightblue;
   box-shadow: 0 0 2px 2px lightblue;
+}
+
+.ReactModal__Body--open {
+  overflow-y: hidden;
+}
+
+.ReactModal__Overlay {
+  z-index: 10
+}
+
+.ReactModal {
+  z-index: 100
 }
