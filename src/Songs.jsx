@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import Tappable from 'react-tappable';
+import TextField from 'material-ui/TextField'
 // import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import './Songs.css';
 import Slider from 'rc-slider';
 import Tooltip from 'rc-tooltip';
+import RaisedButton from 'material-ui/RaisedButton'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 var apikey = require("apikeygen").apikey;
@@ -17,14 +19,17 @@ var apikey = require("apikeygen").apikey;
 
 const ListStyle = {
   width: '90%',
-
   padding: 0,
   margin: 'auto',
   color: 'black',
+  // display: 'flex',
+  // flexFlow: "row wrap",
 
 };
 
-const SongStyle = {
+var SongStyle = {
+  // flex: "0 1 auto",
+  // display: 'inlineBlock',
   border: '1px solid gray',
   borderRadius: 3,
   padding: '0.5rem 1rem',
@@ -35,17 +40,10 @@ const SongStyle = {
   listStylePosition:'inside',
 };
 
-const SelectedStyle = {
-  border: '1px solid gray',
-  borderRadius: 3,
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  backgroundColor: 'white',
-  color: 'black',
-  listStyleType:'none',
-  listStylePosition:'inside',
-  boxShadow: "0 0 3px 3px lightblue",
-};
+var SelectedStyle = Object.assign({}, SongStyle, {
+    backgroundColor: 'white',
+    boxShadow: "0 0 3px 3px lightblue",
+  });
 
 const buttonStyle = {
   border: "3px solid grey",
@@ -58,7 +56,9 @@ const buttonStyle = {
 }
 
 const modalStyles = {
-
+  zIndex: 10,
+  marginTop: 48,
+  backgroundColor: "rgba(255, 255, 255, .8)",
     // top                   : '50%',
     // left                  : '25%',
     // right                 : 'auto',
@@ -111,6 +111,17 @@ class Songs extends Component {
     // console.log("props is ", props)
     // console.log('this.songs is ', this.state.songsStored)
     // console.log('song 1 is ', this.state.songsStored[1])
+    // if (this.state.songsStored.length > 6) {
+    //   console.log('more than 6 songs')
+    //   SongStyle = Object.assign({}, SongStyle, {
+    //     width: '30%',
+    //     float: 'left',
+    //   });
+    //   SelectedStyle = Object.assign({}, SongStyle, {
+    //     backgroundColor: 'white',
+    //     boxShadow: "0 0 3px 3px lightblue",
+    //   });
+    // }
   }
 
   openAddModal() {
@@ -178,7 +189,7 @@ class Songs extends Component {
       this.state,
       {songsStored: songsStored},
       {formSongName: ''},
-      {formSongDuration: 3},
+      {formSongDuration: 200},
       {formSongIntensity: 4},
       {modalAddIsOpen: false},
       )
@@ -230,13 +241,38 @@ class Songs extends Component {
   handleChange(event, key) {
     this.setState({[key]: event.target.value});
   }
+
   handleSliderChange(value, key) {
     this.setState({[key]: value})
+  }
+
+  componentWillMount(){
+    if (this.state.songsStored.length > 6) {
+      console.log('more than 6 songs')
+      SongStyle = Object.assign({}, SongStyle, {
+        // width: '40%'
+      });
+      SelectedStyle = Object.assign({}, SongStyle, {
+        backgroundColor: 'white',
+        boxShadow: "0 0 3px 3px lightblue",
+      })
+    }
+    // put back to normal if songs deleted
+    else {
+      SongStyle = Object.assign({}, SongStyle, {
+        width: '90%'
+      });
+      SelectedStyle = Object.assign({}, SongStyle, {
+        backgroundColor: 'white',
+        boxShadow: "0 0 3px 3px lightblue",
+      });
+    }
   }
 
   render() {
     let songRenderArray = []
     let {songsStored} = this.state;
+    let instructions = (songsStored < 5 ? (<p>Tap to select, hold for options!</p>) :  null)
     // sort songs alphabetically
     // extra sort options as stretch goal
     songsStored = songsStored.sort(function(a, b) {
@@ -250,6 +286,7 @@ class Songs extends Component {
       }
       return 0;
     });
+    // make array of songs to render
     songsStored.map((s) => {
       // if song has been tapped on, render with SelectedStyle
       if (this.state.songsSelected.includes(s.id)) {
@@ -298,27 +335,19 @@ class Songs extends Component {
           contentLabel="Edit Song"
           >
           <h2>Edit Song</h2>
-          <form>
-            <label>
-              Name:
+          <form style={{backgroundColor: "#fff"}}>
               <br/>
-              <input type="text"
-                style={{border: "1px solid grey",
-                  borderRadius: 2,
-                  padding: "3px 0",
-                  width: "100%"
-                }}
+              <TextField
+                style={{size: '1.5em'}}
+                hintText="Song name"
                 value={this.state.editSongName}
                 onChange={event => this.handleChange(event, 'editSongName')} />
-            </label>
             <br/> <br/>
             <label>
               Length: {this.convertDurToString(this.state.editSongDuration)}
               <Slider
                 min={0} max={1500}
-
                 value={this.state.editSongDuration}
-
                 onChange={value => this.handleSliderChange(value, "editSongDuration")}
                 />
             </label>
@@ -329,21 +358,26 @@ class Songs extends Component {
                 min={0} max={7} step={1}
                 handle={handle}
                 value={this.state.editSongIntensity}
-
                 onChange={value => this.handleSliderChange(value, "editSongIntensity")}
                 />
             </label>
           </form>
-          <button
-            style={Object.assign({}, buttonStyle, {right: 20})}
-            onClick={()=>this.editSong()}>Save
-          </button>
-          <button
-            style={Object.assign({}, buttonStyle,
-            {color: 'red',left: 20,  border: "3px solid red",})
-            }
-            onClick={()=>this.deleteSong()}>Delete
-          </button>
+          <RaisedButton
+            label='Tap to Save'
+            primary={true}
+            style={{position:'absolute', bottom: 100, width: '85%'}}
+            onClick={()=>this.editSong()}
+          />
+          <br/>
+          <br/>
+          <Tappable onPress={()=>this.deleteSong()}>
+            <RaisedButton
+              label='Hold to Delete'
+              secondary={true}
+              style={{position:'absolute', bottom: 40, width: '85%'}}
+            />
+          </Tappable>
+
         </Modal>
 
 
@@ -353,65 +387,58 @@ class Songs extends Component {
           onRequestClose={this.closeAddModal}
           style={modalStyles}
           contentLabel="Add Song"
-        >
+          >
 
           <h2>Add Song</h2>
 
           <form>
-            <label>
-              Name:
               <br/>
-              <input type="text"
-                style={{border: "1px solid grey",
-                  borderRadius: 2,
-                  padding: "3px 0",
-                  width: "100%"
-                }}
+                <TextField
+                  hintText="Song name"
                 value={this.state.formSongName}
                 onChange={event => this.handleChange(event, 'formSongName')} />
-            </label>
             <br/> <br/>
-            <label>
+            <p style={{marginBottom: ".5em"}}>
               Length: {this.convertDurToString(this.state.formSongDuration)}
+            </p>
+
               <Slider
                 min={0} max={1500}
                 value={this.state.formSongDuration}
                 onChange={value => this.handleSliderChange(value, "formSongDuration")}
                 />
-            </label>
+
             <br/>
-            <label>
+            <p style={{marginBottom: '.5em'}}>
               Intensity: {this.state.formSongIntensity} / 7
+            </p>
+
               <Slider
                 min={0} max={7} step={1}
                 handle={handle}
                 value={this.state.formSongIntensity}
                 onChange={value => this.handleSliderChange(value, "formSongIntensity")}
                 />
-            </label>
+
           </form>
-          <button
-            style={{
-              border: "1px solid grey",
-              borderRadius: 2,
-              margin: "auto",
-              marginTop: 10,
-            }}
-            onClick={()=>this.addSong()}>Add Song</button>
+          <RaisedButton
+            style={{position:'absolute', bottom: 40, width: '85%'}}
+            label='Tap to Save'
+            primary={true}
+            onClick={()=>this.addSong()}
+          />
         </Modal>
+        {instructions}
 
         <ul style={ListStyle}>
-          {songRenderArray}
-          <Tappable onTap={this.openAddModal}>
-            <li
-              className="songClass"
-              style={{backgroundColor: 'rgba(255, 255, 255, .6)'}}
-              >
-              <strong>Add a new song!</strong>
-              <br/>Press here
-            </li>
-          </Tappable>
+          <li className="songClass">
+            <Tappable onTap={this.openAddModal}>
+                <strong>Add a new song!</strong>
+                <br/>Press here
+            </Tappable>
+          </li>
 
+          {songRenderArray}
         </ul>
       </div>
     )

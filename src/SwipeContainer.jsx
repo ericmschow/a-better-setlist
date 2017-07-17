@@ -3,10 +3,12 @@ import SwipeableViews from 'react-swipeable-views';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {indigo400} from 'material-ui/styles/colors'
+import {indigo400, red500, grey800} from 'material-ui/styles/colors'
+import { StickyContainer, Sticky} from 'react-sticky'
 import Setlist from './Setlist.jsx'
 import Songs from './Songs.jsx'
 import Chart from './Graphs.jsx'
+import './SwipeContainer.css'
 import Tappable from 'react-tappable'
 const styles = {
   slide: {
@@ -15,6 +17,7 @@ const styles = {
     color: '#fff',
     borderLeft: "1px solid #333",
     borderRight: "1px solid #333",
+    // position: 'absolute',
   },
   slide1: {
     background: "#cc3350 url('/img/stage_empty.jpeg') no-repeat fixed",
@@ -45,15 +48,11 @@ const styles = {
   },
 };
 
-const muiTheme = getMuiTheme({
-    palette: {
-        primary1Color: indigo400,
-        primary2Color: indigo400,
-        primary3Color: indigo400,
-        accent1Color: indigo400,
-        pickerHeaderColor: indigo400,
-    },
-});
+
+
+
+
+
 
 class SwipeContainer extends Component {
   constructor(props){
@@ -111,12 +110,64 @@ class SwipeContainer extends Component {
 
   render() {
     const {index} = this.state
+    const tabHeight = 32
+    const tabPad = tabHeight - 10
+    var muiTheme
+    // change theme on swipe
+    switch(index) {
+      case 0:
+        muiTheme = getMuiTheme({
+            palette: {
+                primary1Color: grey800,
+                primary2Color: red500,
+                primary3Color: indigo400,
+                secondary1Color: red500,
+                accent1Color: indigo400,
+                pickerHeaderColor: grey800,
+            },
+        })
+        break;
+      case 1:
+        muiTheme = getMuiTheme({
+            palette: {
+                primary1Color: grey800,
+                primary2Color: red500,
+                primary3Color: red500,
+                accent1Color: red500,
+                pickerHeaderColor: grey800,
+            },
+        })
+        break;
+      case 2:
+        muiTheme = getMuiTheme({
+            palette: {
+                primary1Color: grey800,
+                primary2Color: red500,
+                primary3Color: red500,
+                accent1Color: indigo400,
+                pickerHeaderColor: indigo400,
+            },
+        })
+        break;
+      default:
+        muiTheme = getMuiTheme({
+            palette: {
+                primary1Color: grey800,
+                primary2Color: red500,
+                primary3Color: red500,
+                accent1Color: red500,
+                pickerHeaderColor: grey800,
+            },
+        })
+        break;
+    }
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}><div>
-        <Tabs value={index} fullWidth onChange={this.handleChange}>
-          <Tab label="SONGS" value={0}/>
-          <Tab label="SETLIST" value={1}/>
-          <Tab label="GRAPHS" value={2}/>
+        <Tabs style={{position: 'sticky', top: '0px', zIndex: 5}} value={index}  fullWidth onChange={this.handleChange}>
+          <Tab label="SONGS" value={0} className="tab"/>
+          <Tab label="SETLIST" value={1} className="tab"/>
+          <Tab label="GRAPHS" value={2} className="tab"/>
         </Tabs>
       <SwipeableViews
         index={index}
@@ -125,8 +176,7 @@ class SwipeContainer extends Component {
         enableMouseEvents={true}>
 
         <div style={Object.assign({}, styles.slide, styles.slide1)}>
-          <h3>Your Songs</h3>
-          <p>Tap to select, hold for options!</p>
+
           <Songs
             callbackToUpdateSongsSelected={(songs) => {this.toUpdateSongsSelected(songs)}}
             songsStored = {this.state.songsStored}
@@ -141,7 +191,6 @@ class SwipeContainer extends Component {
           </div>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>
-          <h3>Your Graphs</h3>
           <Chart
             songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}/>
