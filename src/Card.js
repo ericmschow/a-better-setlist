@@ -19,11 +19,17 @@ const cardSource = {
     return {
       id: props.id,
       index: props.index,
+      endDrag: true
     };
-  },
+  }
 };
 
 const cardTarget = {
+  drop(props, monitor, component) {
+    console.log('DROPPED', props);
+    props.setlist();
+  },
+
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
@@ -88,6 +94,14 @@ class Card extends Component {
     durString: PropTypes.string.isRequired,
     moveCard: PropTypes.func.isRequired,
   };
+
+  componentWillUpdate(){
+    if (!this.props.isDragging) {
+      //console.log(this.props);
+      //this.props.setlist();
+    }
+  //   this.debSetlist(this.state.setlist);
+  }
 
   render() {
     const { text, isDragging, connectDragSource, connectDropTarget, index, durString } = this.props;

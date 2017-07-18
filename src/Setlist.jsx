@@ -52,10 +52,7 @@ class Setlist extends Component {
 
   }
 
-  updateSetlistDuration(duration){
-    // callback to receive total duration from DragDropContainer
-    this.setState({setlistDuration: duration})
-  }
+
 
   convertDurToString(input){
     let minutes = Math.floor(input/60);
@@ -69,9 +66,7 @@ class Setlist extends Component {
     this.setState({[key]: event.target.value});
   }
 
-  getSetlist(setlist){
-    this.callbackWithSetlist(setlist);
-  }
+
 
   render(){
     //console.log('songsSelected in setlist render is ', this.state.songsSelected)
@@ -111,7 +106,9 @@ class Setlist extends Component {
             <DragDropContainer
               songsSelected={this.state.songsSelected}
               songsStored={this.state.songsStored}
-              callbackToUpdateDur={(dur)=>this.updateSetlistDuration(dur)}
+
+              callbackWithSetlist={()=>this.props.returnSetlist()}
+              setlist={this.props.setlist}
               />
           </div>
           <div id="setlistNotes">

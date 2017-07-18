@@ -124,6 +124,15 @@ class Songs extends Component {
     // }
   }
 
+  updateDur(){
+    let totalDuration = 0
+    this.props.setlist.forEach((song)=> {
+      totalDuration += song.duration
+    })
+    // console.log('total duration is ', totalDuration)
+    this.props.callbackToUpdateDur(totalDuration)
+  }
+
   openAddModal() {
     this.setState({modalAddIsOpen: true});
   }
@@ -172,6 +181,7 @@ class Songs extends Component {
       newSongs.push(song.id)
     }
     this.updateSetlist(newSongs)
+    this.updateDur()
   }
 
   addSong() {

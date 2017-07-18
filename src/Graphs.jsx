@@ -10,52 +10,57 @@ class Chart extends Component {
     const initialWidth = window.innerWidth > 0 ? window.innerWidth : 500;
     this.state = {
       dataIntensity: [
-          { x: 100, y: 20 },
-          { x: 200, y: 10 },
-          { x: 30, y: 25 }
         ],
       dataResponse:[
-          { x: '600', y: 10 },
-          { x: '60', y: 12 },
-          { x: '180', y: 4 }
         ],
       songsSelected: props.songsSelected,
       songsStored: props.songsStored,
-      setlist: [],
+      setlist: props.setlist,
       showToolTip: false,
       windowWidth: initialWidth - 100
       }
 
   }
 
-  updateSetlist(){
-    let setlist = [];
-    this.state.songsSelected.forEach((songid, i, ss) => {
-      setlist.push(this.state.songsStored.find(x => x.id === songid ))
+  updateGraph(){
+    const {dataIntensity, dataResponse} = this.state;
+    const {setlist} = this.props;
+    let tempIntensity = [];
+    setlist.forEach((song, i, ss) => {
+      tempIntensity.push({x: song.duration, y: song.intensity})
     })
-    this.setState({setlist: setlist})
-    let totalDuration = 0
-    setlist.forEach((song)=> {
-      totalDuration += song.duration
-    })
+    // uncomment when response added to songs
+    let tempResponse = [];
+    // setlist.forEach((song, i, ss) => {
+    //   tempResponse.push({x: song.duration, y: song.response} ))
+    // })
+    this.setState({dataIntensity: tempIntensity, dataResponse: tempResponse})
+    console.log('tempIntensity after updateGraph is ',tempIntensity)
   }
 
-  deb = debounce(this.updateSetlist, 250, true)
+  deb = debounce(this.updateGraph, 250, true)
   componentWillReceiveProps(){
     this.deb();
   }
 
   render(){
     const {dataIntensity, dataResponse} = this.state
+    console.log('graphs setlist is' , this.props.setlist)
     // console.log('dI is ', dataIntensity)
     return(
       <div className="chart">
         <ResponsiveContainer width="80%" height={400}>
           <AreaChart data={dataIntensity}>
+            <defs>
+              <linearGradient id="colorInt" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#f00" stopOpacity={1}/>
+                <stop offset="95%" stopColor="#00f" stopOpacity={1}/>
+              </linearGradient>
+            </defs>
             <XAxis />
             <YAxis />
-            <Tooltip />
-            <Area type='monotone' dataKey='y' stroke='#8884d8' fill='#8884d8' />
+            
+            <Area type='monotone' dataKey='y' stroke='#8884d8' fill='url(#colorInt)' />
           </AreaChart>
         </ResponsiveContainer>
 

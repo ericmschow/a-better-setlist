@@ -3,7 +3,7 @@ import SwipeableViews from 'react-swipeable-views';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {indigo400, red500, grey800} from 'material-ui/styles/colors'
+import {indigo400, red400, grey800} from 'material-ui/styles/colors'
 import { StickyContainer, Sticky} from 'react-sticky'
 import Setlist from './Setlist.jsx'
 import Songs from './Songs.jsx'
@@ -78,25 +78,44 @@ class SwipeContainer extends Component {
         intensity: 5
         }
       ],
-      songsStored: JSON.parse(localStorage.songs),
+      songsStored: JSON.parse(localStorage.songs || '[]'),
       songsSelected: [],
+      setlist: [],
       index: 0,
     }
     // this.state.songsSelected = [this.state.songsTest[1].id, this.state.songsTest[2].id]  // uncomment to add selected
     // console.log('songStored is ', this.state.songsStored)
     //localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
   }
-  componentDidUpdate(){
-    console.log('swipecontainer index is ', this.state.index)
-  }
+  // componentDidUpdate(){
+    // console.log('swipecontainer index is ', this.state.index)
+  // }
   toUpdateSongsSelected(newSongs){
     this.setState({songsSelected: newSongs})
+    // console.log('toUpdateSongsSelected');
     //this.setState({songsSelected: ss.push(song.id)});
     // console.log('songsSelected in SwipeContainer Updated: ', this.state.songsSelected)
+    var setlist = [];
+    this.state.songsSelected.forEach((songid, i, ss) => {
+      // console.log('ss foreach songid: ', i, songid)
+      setlist.push(this.state.songsStored.find(x => x.id === songid ))
+    })
+
+    this.setState({setlist: setlist});
+  }
+
+  updateSetlistDuration(duration){
+    // callback to receive total duration from DragDropContainer
+    console.log('updateSetlistDuration')
+    this.setState({setlistDuration: duration})
+  }
+
+  returnSetlist(){
+    this.setState({setlist: this.state.setlist});
   }
 
   handleChange = (value) => {
-    console.log('handleChange args:', arguments)
+    // console.log('handleChange args:', arguments)
     this.setState({
       index: value,
     });
@@ -119,9 +138,9 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
+                primary2Color: red400,
                 primary3Color: indigo400,
-                secondary1Color: red500,
+                secondary1Color: red400,
                 accent1Color: indigo400,
                 pickerHeaderColor: grey800,
             },
@@ -131,9 +150,10 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
-                primary3Color: red500,
-                accent1Color: red500,
+                primary2Color: red400,
+                primary3Color: red400,
+                secondary1Color: red400,
+                accent1Color: red400,
                 pickerHeaderColor: grey800,
             },
         })
@@ -142,8 +162,9 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
-                primary3Color: red500,
+                primary2Color: red400,
+                primary3Color: red400,
+                secondary1Color: red400,
                 accent1Color: indigo400,
                 pickerHeaderColor: indigo400,
             },
@@ -153,9 +174,10 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
-                primary3Color: red500,
-                accent1Color: red500,
+                primary2Color: red400,
+                primary3Color: red400,
+                secondary1Color: red400,
+                accent1Color: red400,
                 pickerHeaderColor: grey800,
             },
         })
@@ -179,6 +201,8 @@ class SwipeContainer extends Component {
 
           <Songs
             callbackToUpdateSongsSelected={(songs) => {this.toUpdateSongsSelected(songs)}}
+            callbackToUpdateDur={(dur)=>this.updateSetlistDuration(dur)}
+            setlist = {this.state.setlist}
             songsStored = {this.state.songsStored}
             songsSelected = {this.state.songsSelected}/>
         </div>
@@ -186,14 +210,17 @@ class SwipeContainer extends Component {
           <div style={styles.chartBackground}>
             <div >
               <Setlist songsSelected = {this.state.songsSelected}
-            songsStored = {this.state.songsStored}/>
+            songsStored = {this.state.songsStored}
+            setlist={this.state.setlist}
+            returnSetlist={()=>this.returnSetlist()}/>
             </div>
           </div>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>
           <Chart
             songsSelected = {this.state.songsSelected}
-            songsStored = {this.state.songsStored}/>
+            songsStored = {this.state.songsStored}
+            setlist = {this.state.setlist}/>
         </div>
       </SwipeableViews>
       </div></MuiThemeProvider>
