@@ -92,12 +92,26 @@ class SwipeContainer extends Component {
   // }
   toUpdateSongsSelected(newSongs){
     this.setState({songsSelected: newSongs})
+    // console.log('toUpdateSongsSelected');
     //this.setState({songsSelected: ss.push(song.id)});
     // console.log('songsSelected in SwipeContainer Updated: ', this.state.songsSelected)
+    var setlist = [];
+    this.state.songsSelected.forEach((songid, i, ss) => {
+      // console.log('ss foreach songid: ', i, songid)
+      setlist.push(this.state.songsStored.find(x => x.id === songid ))
+    })
+
+    this.setState({setlist: setlist});
   }
 
-  returnSetlist(setlist){
-    this.setState({setlist: setlist});
+  updateSetlistDuration(duration){
+    // callback to receive total duration from DragDropContainer
+    console.log('updateSetlistDuration')
+    this.setState({setlistDuration: duration})
+  }
+
+  returnSetlist(){
+    this.setState({setlist: this.state.setlist});
   }
 
   handleChange = (value) => {
@@ -187,6 +201,8 @@ class SwipeContainer extends Component {
 
           <Songs
             callbackToUpdateSongsSelected={(songs) => {this.toUpdateSongsSelected(songs)}}
+            callbackToUpdateDur={(dur)=>this.updateSetlistDuration(dur)}
+            setlist = {this.state.setlist}
             songsStored = {this.state.songsStored}
             songsSelected = {this.state.songsSelected}/>
         </div>
@@ -195,7 +211,8 @@ class SwipeContainer extends Component {
             <div >
               <Setlist songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}
-            returnSetlist={(setlist)=>this.returnSetlist(setlist)}/>
+            setlist={this.state.setlist}
+            returnSetlist={()=>this.returnSetlist()}/>
             </div>
           </div>
         </div>

@@ -28,4 +28,4 @@ Some challenges faced while building this project included:
 
 * Finding a way to take touch input on individual divs while react-swipeable-views wanted to take touch input on the entire screen. Solved via finding a different touch module, Tappable, that worked at a higher priority than react-swipeable-views.
 
-* More to come, certainly.
+* Getting the setlist information from the drag and drop interface to the graph output. Solved via refactoring the out-of-the-box react-dnd module hookup, and bringing the setlist state up from the setlist page to the main container page. The drag and drop interface now mutates a reference to the setlist state back in the main app, which passes the setlist information back to the drag and drop interface as well as the graph page. 

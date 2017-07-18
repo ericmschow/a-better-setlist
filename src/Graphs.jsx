@@ -35,7 +35,7 @@ class Chart extends Component {
     //   tempResponse.push({x: song.duration, y: song.response} ))
     // })
     this.setState({dataIntensity: tempIntensity, dataResponse: tempResponse})
-    console.log('dataintensity after updateGraph is ',dataIntensity)
+    console.log('tempIntensity after updateGraph is ',tempIntensity)
   }
 
   deb = debounce(this.updateGraph, 250, true)
@@ -51,10 +51,16 @@ class Chart extends Component {
       <div className="chart">
         <ResponsiveContainer width="80%" height={400}>
           <AreaChart data={dataIntensity}>
+            <defs>
+              <linearGradient id="colorInt" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#f00" stopOpacity={1}/>
+                <stop offset="95%" stopColor="#00f" stopOpacity={1}/>
+              </linearGradient>
+            </defs>
             <XAxis />
             <YAxis />
-            <Tooltip />
-            <Area type='monotone' dataKey='y' stroke='#8884d8' fill='#8884d8' />
+            
+            <Area type='monotone' dataKey='y' stroke='#8884d8' fill='url(#colorInt)' />
           </AreaChart>
         </ResponsiveContainer>
 
