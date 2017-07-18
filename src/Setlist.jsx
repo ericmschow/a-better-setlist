@@ -69,12 +69,11 @@ class Setlist extends Component {
     this.setState({[key]: event.target.value});
   }
 
-  getSetlist(setlist){
-    this.callbackWithSetlist(setlist);
-  }
+
 
   render(){
     //console.log('songsSelected in setlist render is ', this.state.songsSelected)
+    console.log('setlist is ', this.state.setlist)
     if (this.state.songsSelected.length === 0){
       return(
         <div>
@@ -112,6 +111,7 @@ class Setlist extends Component {
               songsSelected={this.state.songsSelected}
               songsStored={this.state.songsStored}
               callbackToUpdateDur={(dur)=>this.updateSetlistDuration(dur)}
+              callbackWithSetlist={(setlist)=>this.props.returnSetlist(setlist)}
               />
           </div>
           <div id="setlistNotes">

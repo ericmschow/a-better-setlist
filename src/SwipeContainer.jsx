@@ -3,7 +3,7 @@ import SwipeableViews from 'react-swipeable-views';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {indigo400, red500, grey800} from 'material-ui/styles/colors'
+import {indigo400, red400, grey800} from 'material-ui/styles/colors'
 import { StickyContainer, Sticky} from 'react-sticky'
 import Setlist from './Setlist.jsx'
 import Songs from './Songs.jsx'
@@ -78,25 +78,30 @@ class SwipeContainer extends Component {
         intensity: 5
         }
       ],
-      songsStored: JSON.parse(localStorage.songs),
+      songsStored: JSON.parse(localStorage.songs || '[]'),
       songsSelected: [],
+      setlist: [],
       index: 0,
     }
     // this.state.songsSelected = [this.state.songsTest[1].id, this.state.songsTest[2].id]  // uncomment to add selected
     // console.log('songStored is ', this.state.songsStored)
     //localStorage.songs = JSON.stringify(this.state.songsTest)    // uncomment to reinitialize dummy songs
   }
-  componentDidUpdate(){
-    console.log('swipecontainer index is ', this.state.index)
-  }
+  // componentDidUpdate(){
+    // console.log('swipecontainer index is ', this.state.index)
+  // }
   toUpdateSongsSelected(newSongs){
     this.setState({songsSelected: newSongs})
     //this.setState({songsSelected: ss.push(song.id)});
     // console.log('songsSelected in SwipeContainer Updated: ', this.state.songsSelected)
   }
 
+  returnSetlist(setlist){
+    this.setState({setlist: setlist});
+  }
+
   handleChange = (value) => {
-    console.log('handleChange args:', arguments)
+    // console.log('handleChange args:', arguments)
     this.setState({
       index: value,
     });
@@ -119,9 +124,9 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
+                primary2Color: red400,
                 primary3Color: indigo400,
-                secondary1Color: red500,
+                secondary1Color: red400,
                 accent1Color: indigo400,
                 pickerHeaderColor: grey800,
             },
@@ -131,9 +136,10 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
-                primary3Color: red500,
-                accent1Color: red500,
+                primary2Color: red400,
+                primary3Color: red400,
+                secondary1Color: red400,
+                accent1Color: red400,
                 pickerHeaderColor: grey800,
             },
         })
@@ -142,8 +148,9 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
-                primary3Color: red500,
+                primary2Color: red400,
+                primary3Color: red400,
+                secondary1Color: red400,
                 accent1Color: indigo400,
                 pickerHeaderColor: indigo400,
             },
@@ -153,9 +160,10 @@ class SwipeContainer extends Component {
         muiTheme = getMuiTheme({
             palette: {
                 primary1Color: grey800,
-                primary2Color: red500,
-                primary3Color: red500,
-                accent1Color: red500,
+                primary2Color: red400,
+                primary3Color: red400,
+                secondary1Color: red400,
+                accent1Color: red400,
                 pickerHeaderColor: grey800,
             },
         })
@@ -186,14 +194,16 @@ class SwipeContainer extends Component {
           <div style={styles.chartBackground}>
             <div >
               <Setlist songsSelected = {this.state.songsSelected}
-            songsStored = {this.state.songsStored}/>
+            songsStored = {this.state.songsStored}
+            returnSetlist={(setlist)=>this.returnSetlist(setlist)}/>
             </div>
           </div>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>
           <Chart
             songsSelected = {this.state.songsSelected}
-            songsStored = {this.state.songsStored}/>
+            songsStored = {this.state.songsStored}
+            setlist = {this.state.setlist}/>
         </div>
       </SwipeableViews>
       </div></MuiThemeProvider>

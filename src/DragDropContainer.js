@@ -94,6 +94,7 @@ class DragDropContainer extends Component {
     })
     // console.log('total duration is ', totalDuration)
     this.props.callbackToUpdateDur(totalDuration)
+    this.props.callbackWithSetlist(setlist)
     // this.state = Object.assign({}, this.state, {setlist: setlist})
   }
 
@@ -106,7 +107,7 @@ class DragDropContainer extends Component {
     const { songsStored, songsSelected, setlist } = this.state;
     // const { songsStored, songsSelected} = this.state;
     // console.log('songsSelected in DDC render is ', songsSelected)
-    // console.log('ddc render setlist ', setlist)
+    console.log('ddc render setlist ', setlist)
     return (
       <div style={style}>
         {setlist.map((song, i) => (
