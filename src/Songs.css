@@ -31,5 +31,6 @@ ul {
 }
 
 .ReactModal {
-  z-index: 100
+  z-index: 100;
+  background: #cc3350 url('/img/sheets1.jpeg') no-repeat fixed;
 }

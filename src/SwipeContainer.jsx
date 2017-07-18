@@ -106,7 +106,7 @@ class SwipeContainer extends Component {
 
   updateSetlistDuration(duration){
     // callback to receive total duration from DragDropContainer
-    console.log('updateSetlistDuration')
+
     this.setState({setlistDuration: duration})
   }
 
@@ -208,18 +208,19 @@ class SwipeContainer extends Component {
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide2)}>
           <div style={styles.chartBackground}>
-            <div >
-              <Setlist songsSelected = {this.state.songsSelected}
+          <Setlist
+            songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}
             setlist={this.state.setlist}
+            setlistDuration = {this.state.setlistDuration}
             returnSetlist={()=>this.returnSetlist()}/>
-            </div>
           </div>
         </div>
         <div style={Object.assign({}, styles.slide, styles.slide3)}>
           <Chart
             songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}
+            setlistDuration = {this.state.setlistDuration}
             setlist = {this.state.setlist}/>
         </div>
       </SwipeableViews>

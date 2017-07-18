@@ -17,6 +17,7 @@ const setlistNameStyle = {
   backgroundColor: "rgba(120, 120, 120, .6)",
   border: 'none',
   color: '#fff',
+  maxWidth: "85vw",
 }
 const setlistFieldStyle = {
   fontSize:'1em',
@@ -43,8 +44,7 @@ class Setlist extends Component {
       songsSelected: props.songsSelected,
       songsStored: props.songsStored,
       setlistName: 'Your Setlist',
-      setlistDuration: null,
-      setlistNotes: 'People/bands to thank: ',
+      setlistNotes: 'Notes you want at the bottom of your setlist! Maybe list some people/bands to thank:',
     }
     // console.log('songsSelected in setlist is ', this.state.songsSelected)
     // console.log('songStored 1 is ', this.state.songsStored[1])
@@ -78,10 +78,13 @@ class Setlist extends Component {
             onChange={event => this.handleChange(event, 'setlistName')}
             style={setlistNameStyle}/>
           <div style={{margin: "1em"}}>
-            <p>You haven't selected any songs!<br/><br/> Swipe back and click on some to get started.</p>
+            <p style={{
+                backgroundColor: "rgba(125, 125, 125, 0.4)",
+                border: "2px solid #ccc"}}
+              >
+              You haven't selected any songs!<br/><br/> Swipe back and click on some.</p>
           </div>
           <div id="setlistNotes">
-            <label>Notes:</label>
             <textarea
                       style={setlistFieldStyle}
                       value={this.state.setlistNotes}
@@ -100,7 +103,7 @@ class Setlist extends Component {
             onChange={event => this.handleChange(event, 'setlistName')}
             style={setlistNameStyle}
             />
-          <p>Total length: {this.convertDurToString(this.state.setlistDuration)}</p>
+          <p>Total length: {this.convertDurToString(this.props.setlistDuration)}</p>
           <p>Drag to reorder!</p>
           <div id="dragDropDiv">
             <DragDropContainer
