@@ -101,10 +101,12 @@ class Songs extends Component {
       formSongName: '',
       formSongDuration: 200,
       formSongIntensity: 4,
+      formSongResponse: 4,
       editSongId: '',
       editSongName: '',
       editSongDuration: '',
       editSongIntensity: '',
+      formSongResponse: '',
     }
     this.openAddModal = this.openAddModal.bind(this);
     this.closeModals = this.closeModals.bind(this);
@@ -148,6 +150,7 @@ class Songs extends Component {
         editSongName: song.name,
         editSongDuration: song.duration,
         editSongIntensity: song.intensity,
+        editSongResponse: song.response,
         modalEditIsOpen: true
       });
   }
@@ -192,9 +195,11 @@ class Songs extends Component {
       name: this.state.formSongName,
       duration: this.state.formSongDuration,
       intensity: this.state.formSongIntensity,
+      response: this.state.formSongResponse,
       durString: this.convertDurToString(this.state.formSongDuration),
     }
     songsStored.push(newSong)
+    // reset state to have default song info for next time
     let newState = Object.assign(
       {},
       this.state,
@@ -202,6 +207,7 @@ class Songs extends Component {
       {formSongName: ''},
       {formSongDuration: 200},
       {formSongIntensity: 4},
+      {formSongResponse: 4},
       {modalAddIsOpen: false},
       )
     this.setState(newState)
@@ -220,6 +226,7 @@ class Songs extends Component {
       name: this.state.editSongName,
       duration: this.state.editSongDuration,
       intensity: this.state.editSongIntensity,
+      response: this.state.editSongResponse,
       durString: this.convertDurToString(this.state.editSongDuration),
     }
     let index = songsStored.indexOf(this.state.oldSong);
@@ -316,7 +323,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {s.durString} | Intensity: {s.intensity}/7
+              {s.durString} | Intensity: {s.intensity}/7 | Response: {s.response}/7
             </li>
           </Tappable>
         )
@@ -334,7 +341,7 @@ class Songs extends Component {
               <strong>{s.name}</strong>
               <br/>
 
-              Length: {s.durString} | Intensity: {s.intensity}/7
+              {s.durString} | Intensity: {s.intensity}/7 | Response: {s.response}/7
             </li>
           </Tappable>
         )
@@ -361,19 +368,29 @@ class Songs extends Component {
             <label>
               Length: {this.convertDurToString(this.state.editSongDuration)}
               <Slider
-                min={0} max={1500}
+                min={1} max={1500}
                 value={this.state.editSongDuration}
                 onChange={value => this.handleSliderChange(value, "editSongDuration")}
                 />
             </label>
             <br/>
             <label>
-              Intensity: {this.state.editSongIntensity} / 7
+              Song Intensity: {this.state.editSongIntensity} / 7
               <Slider
-                min={0} max={7} step={1}
+                min={1} max={7} step={1}
                 handle={handle}
                 value={this.state.editSongIntensity}
                 onChange={value => this.handleSliderChange(value, "editSongIntensity")}
+                />
+            </label>
+            <br/>
+            <label>
+              Crowd Response: {this.state.editSongResponse} / 7
+              <Slider
+                min={1} max={7} step={1}
+                handle={handle}
+                value={this.state.editSongResponse}
+                onChange={value => this.handleSliderChange(value, "editSongResponse")}
                 />
             </label>
           </form>
@@ -423,21 +440,32 @@ class Songs extends Component {
             </p>
 
               <Slider
-                min={0} max={1500}
+                min={1} max={1500}
                 value={this.state.formSongDuration}
                 onChange={value => this.handleSliderChange(value, "formSongDuration")}
                 />
 
             <br/>
             <p style={{marginBottom: '.5em'}}>
-              Intensity: {this.state.formSongIntensity} / 7
+              Song Intensity: {this.state.formSongIntensity} / 7
             </p>
 
               <Slider
-                min={0} max={7} step={1}
+                min={1} max={7} step={1}
                 handle={handle}
                 value={this.state.formSongIntensity}
                 onChange={value => this.handleSliderChange(value, "formSongIntensity")}
+                />
+            <br/>
+            <p style={{marginBottom: '.5em'}}>
+              Crowd Response: {this.state.formSongResponse} / 7
+            </p>
+
+              <Slider
+                min={1} max={7} step={1}
+                handle={handle}
+                value={this.state.formSongResponse}
+                onChange={value => this.handleSliderChange(value, "formSongResponse")}
                 />
 
           </form>
@@ -451,12 +479,12 @@ class Songs extends Component {
         {instructions}
 
         <ul style={ListStyle}>
-          <li className="songClass">
-            <Tappable onTap={()=>this.openAddModal()}>
-                <strong>Add a new song!</strong>
-                <br/>Press here
-            </Tappable>
-          </li>
+          <Tappable onTap={()=>this.openAddModal()}>
+            <li className="songClass">
+              <strong>Add a new song!</strong>
+              <br/>Press here
+            </li>
+          </Tappable>
 
           {songRenderArray}
         </ul>

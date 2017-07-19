@@ -1,7 +1,13 @@
 #setlistNotes{
-  position: absolute;
+  /*position: absolute;*/
+  position: relative;
   height: 30%;
-  width: 90%;
+  /*width: 90%;*/
+  margin: auto
+}
+
+#setlistContainer {
+  height: 100%;
 }
 
 #dragDropDiv {
