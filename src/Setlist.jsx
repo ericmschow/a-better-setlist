@@ -118,7 +118,7 @@ class Setlist extends Component {
     })
     doc.text(line.join(' '), 20, yPos) // print last line if not a full 7 words as above
     doc.setFontSize(10)
-    doc.text('This setlist was created using the free app setlist.ericmschow.com!', 10, 275)
+    doc.text('This setlist was created using the free app available at https://setlist.ericmschow.com!', 20, 275)
     // maybe draw rect around
     doc.save(filename)
   }
