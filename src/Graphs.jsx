@@ -211,8 +211,7 @@ class Chart extends Component {
           >
           <MenuItem value={1} primaryText="Intensity per Song" />
           <MenuItem value={2} primaryText="Response per Song"/>
-          <MenuItem value={3} primaryText="Intensity per Minute" disabled={true}/>
-          <MenuItem value={4} primaryText="Response per Minute" disabled={true}/>
+
         </DropDownMenu>
 
       <div className="chart" >

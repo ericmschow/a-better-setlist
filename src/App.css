@@ -17,6 +17,15 @@
   padding: 0px;
   font-size: 1.5em;
   color: #111;
+  background-size: cover !important;
+  background-position: center -13vh !important;
+}
+
+@media(min-width: 768px){
+  .App-header {
+    background-size: 125% !important;
+    background-position: center -33vh !important;
+  }
 }
 
 .App-header ul {

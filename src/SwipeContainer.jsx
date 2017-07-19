@@ -23,24 +23,21 @@ const styles = {
     // position: 'absolute',
   },
   slide1: {
-    background: `#cc3350 url('${img1}') no-repeat fixed`,
+    background: `#cc3350 url('${img1}') no-repeat`,
     // backgroundSize: "auto 125%",
-    backgroundSize: 'cover',
-    backgroundPosition: "-35vw 5vh"
+
   },
   slide2: {
     backgroundColor: "#00ff00",
-    background: `url('${img2}') no-repeat fixed`,
+    background: `url('${img2}') no-repeat`,
     // backgroundSize: "auto 125%",
-    backgroundPosition: "0vw center",
-    backgroundSize: 'cover',
+
   },
   slide3: {
     backgroundColor: "#0000ff",
-    background: `url('${img3}') no-repeat fixed`,
+    background: `url('${img3}') no-repeat`,
     // backgroundSize: "auto 125%",
-    backgroundSize: 'cover',
-    backgroundPosition: "150vw center",
+
   },
   chartBackground: {
     // background: "url('/img/mixer2.jpeg') no-repeat fixed",
@@ -200,7 +197,7 @@ class SwipeContainer extends Component {
         resistance= {true}
         enableMouseEvents={true}>
 
-        <div style={Object.assign({}, styles.slide, styles.slide1)}>
+        <div id="songsDiv" style={Object.assign({}, styles.slide, styles.slide1)}>
 
           <Songs
             callbackToUpdateSongsSelected={(songs) => {this.toUpdateSongsSelected(songs)}}
@@ -209,7 +206,7 @@ class SwipeContainer extends Component {
             songsStored = {this.state.songsStored}
             songsSelected = {this.state.songsSelected}/>
         </div>
-        <div style={Object.assign({}, styles.slide, styles.slide2)}>
+        <div id="setlistDiv" style={Object.assign({}, styles.slide, styles.slide2)}>
           <div style={styles.chartBackground}>
           <Setlist
             songsSelected = {this.state.songsSelected}
@@ -219,7 +216,7 @@ class SwipeContainer extends Component {
             returnSetlist={()=>this.returnSetlist()}/>
           </div>
         </div>
-        <div style={Object.assign({}, styles.slide, styles.slide3)}>
+        <div id="chartDiv" style={Object.assign({}, styles.slide, styles.slide3)}>
           <Chart
             songsSelected = {this.state.songsSelected}
             songsStored = {this.state.songsStored}

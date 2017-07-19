@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import './Setlist.css'
 import jsPDF from 'jspdf'
+var debounce = require('debounce')
 // Setlist is an array of Song objects
 // Needs to be an array, as setlists are ordered
 // Songs have:
@@ -93,14 +94,36 @@ class Setlist extends Component {
       doc.text(str, 20, yPos)
       yPos += yPosAdj
     })
-    doc.setFontSize(16)
-    doc.text(this.state.setlistNotes)
+    doc.setFontSize(20)
+    let notesSplit = this.state.setlistNotes.split(" ");
+    console.log('notesSplit is ', notesSplit)
+    let lines = []
+    let line = []
+    let counter = 0
+    yPos += 50 // move down for notes
+    notesSplit.forEach(function(word, i){
+      line.push(word)
+      console.log('line is ', line)
+      counter++
+      if (counter > 7) {
+        lines.push(line.join(' '));
+        line = [];
+        counter = 0;
+        console.log('lines is ', lines, 'and line is now ', line)
+      }
+    })
+    lines.forEach(function(stri){
+      doc.text(stri, 20, yPos)
+      yPos += yPosAdj
+    })
+    doc.text(line.join(' '), 20, yPos) // print last line if not a full 7 words as above
     doc.setFontSize(10)
-    doc.text('This setlist was created using the free app setlist.ericmschow.com!', 10, -15)
+    doc.text('This setlist was created using the free app setlist.ericmschow.com!', 10, 275)
     // maybe draw rect around
     doc.save(filename)
   }
 
+  debWritePDF = debounce(()=>{this.writePDF()}, 1000, true)
 
 
   render(){
@@ -108,11 +131,14 @@ class Setlist extends Component {
     if (this.state.songsSelected.length === 0){
       return(
         <div>
-          <input type='text'
+          <TextField
             value={this.state.setlistName}
+            textColor="#fff"
             onChange={event => this.handleChange(event, 'setlistName')}
             style={setlistNameStyle}
-            maxLength="24"/>
+            inputStyle={setlistNameStyle}
+            maxLength="24"
+            />
           <div style={{margin: "1em"}}>
             <p style={{
                 backgroundColor: "rgba(125, 125, 125, 0.4)",
@@ -122,13 +148,16 @@ class Setlist extends Component {
           </div>
 
           <div id="setlistNotes">
-            <textarea
-                      style={setlistFieldStyle}
-                      value={this.state.setlistNotes}
-                      onChange={event => this.handleChange(event, 'setlistNotes')}
-                      rows={4}
-                      maxLength="180"
-                      />
+            <TextField
+              textareaStyle={setlistFieldStyle}
+              style={setlistFieldStyle}
+              hintText="Notes"
+              value={this.state.setlistNotes}
+              onChange={event => this.handleChange(event, 'setlistNotes')}
+              multiLine={true}
+              rows={4}
+              maxLength="180"
+              />
           </div>
         </div>
       )
@@ -173,7 +202,7 @@ class Setlist extends Component {
             primary={true}
             width="90%"
             style={{marginBottom: "1rem"}}
-            onClick={()=>this.writePDF()} label="Download Setlist"/>
+            onClick={()=>this.debWritePDF()} label="Download Setlist"/>
         </div>
       )
     }
