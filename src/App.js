@@ -16,9 +16,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header" style={{background: `#7382bb url('${bg1}') no-repeat`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center -13vh',}}>
+        <div className="App-header" style={{background: `#7382bb url('${bg1}') no-repeat`,}}>
           <br/>
           <h2>A Better Setlist</h2>
         </div>

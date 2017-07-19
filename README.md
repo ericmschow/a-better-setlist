@@ -14,10 +14,11 @@ We could use a Google/Excel spreadsheet to track the information, but that does 
 * ~~Easily re-order their setlist via drag-and-drop~~
 
 ## Stretch goals:
-* ~~Graphs to easily answer questions about your setlist, e.g. "Will there be breaks in intensity to let the audience relax?" or "How will the audience respond to this track order based on how I've rated the crowd response?"~~
+* ~~Graphs to easily answer questions about your setlist, e.g. "Will there be breaks in intensity to let the audience relax?" or "How will the audience respond to this track order based on how I've rated the crowd response level for each song?"~~
 * Seamless vs seamed transition option for setlist, granting the option to add dead time between songs to make charts more realistic
 * Song sorting options for main list beyond alphabetically
-* Google Drive export feature to easily print out the list from computer (vs screenshots from phone)
+* ~~Save PDF version of setlist for printing~~
+* Google Drive export feature to easily share with bandmates (vs screenshots from phone)
 * Automatic setlist re-ordering, including randomly or in accordance with a given intensity or response curve
 * Allow the user to have multiple bands
 * Allow saving/loading different setlists
@@ -30,3 +31,5 @@ We could use a Google/Excel spreadsheet to track the information, but that does 
 * Finding a way to take touch input on individual divs while react-swipeable-views wanted to take touch input on the entire screen. Solved via finding a different touch module, Tappable, that worked at a higher priority than react-swipeable-views.
 
 * Getting the setlist information from the drag and drop interface to the graph output. Solved via refactoring the out-of-the-box react-dnd module hookup, and bringing the setlist state up from the setlist page to the main container page. The drag and drop interface now mutates a reference to the setlist state back in the main app, which passes the setlist information back to the drag and drop interface as well as the graph page.
+
+* Getting the layout to look good on desktop as well as mobile. What seemed fine in the Chrome Device toolbar turned out to be nothing like how it appeared on a real device. This issue took some time to ultimately resolve, and had I not deployed early in the project week I would not have been able to fix it. Solved via using Chrome's developer tools with a cable running to my phone, CSS media queries, and good old trial and error for the layout design choices.

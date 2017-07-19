@@ -106,7 +106,7 @@ class Songs extends Component {
       editSongName: '',
       editSongDuration: '',
       editSongIntensity: '',
-      formSongResponse: '',
+      editSongResponse: '',
     }
     this.openAddModal = this.openAddModal.bind(this);
     this.closeModals = this.closeModals.bind(this);

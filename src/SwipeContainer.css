@@ -5,3 +5,35 @@
 .tab:first-child {
   height:
 }
+
+#songsDiv {
+  background-size: cover !important;
+  background-position: -35vw center !important;
+}
+
+#setlistDiv {
+  background-size: cover !important;
+  background-position: -76vw -15vh !important;
+}
+
+#chartDiv {
+  background-size: cover !important;
+  background-position: 0vw center !important;
+}
+
+@media(min-width: 768px){
+  #songsDiv {
+    background-position: center !important;
+    background-size: 200% !important;
+  }
+
+  #setlistDiv {
+    background-position: center !important;
+    background-size: 200% !important;
+  }
+
+  #chartDiv {
+    background-position: center !important;
+    background-size: 200% !important;
+  }
+}
