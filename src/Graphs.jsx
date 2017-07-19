@@ -12,16 +12,6 @@ var debounce = require('debounce')
 //   <p style={{color: labelColor}}>Track</p>
 // )}
 
-// const NotAxisTickButLabel = props=> ( <g transform={  "translate( " + props.x + "," + props.y + " )" }><text x={0} y={0} dy={16}  fontFamily="Roboto"  fontSize="10px"  textAnchor="end"  fill={props.color || "#8884d8" } transform={"rotate(" + props.angle + ")" } >{props.payload}</text></g>   )
-
-const WhiteLabel = ({ x, y, stroke, value }) => {
-  return (
-    <div style={{ color: '#FFFFFF' }}>
-      <text x={x} y={y} dy={-4} fill={stroke} fontSize={10} textAnchor="middle">{value}</text>);
-    </div>
-  );
-};
-
 class Chart extends Component {
   constructor(props){
     super(props)
@@ -34,60 +24,13 @@ class Chart extends Component {
       showToolTip: false,
       windowWidth: initialWidth - 100,
       value: 1,
-      valueX: 1,
-      valueY: 1,
-    }
-
-  }
-
-
-  updateGraph(){
-    const {dataIntensity, dataResponse} = this.state;
-    const {setlist, setlistDuration} = this.props;
-    // if (setlist){console.log(setlist[0].duration, setlistDuration)}
-
-    let tempData = [];
-    setlist.forEach((song, i, ss) => {
-      tempData.push(Object.assign({}, song, {track: i+1, relativeDuration: song.duration/setlistDuration}))
-    })
-    this.setState({data: tempData})
-    // console.log('tempData after updateGraph is ',tempData)
-  }
-
-  handleChange = (event, index, value) => {
-    console.log('handleChange value ', value)
-    switch (value){
-      case 1: this.setState({value: 1, valueX: 1, valueY: 1}); // intensity/track
-      case 2: this.setState({value: 2, valueX: 1, valueY: 2}); // response/track
-      case 3: this.setState({value: 3, valueX: 2, valueY: 1}); // intensity/minute
-      case 4: this.setState({value: 4, valueX: 2, valueY: 2}); // response/minute
-      default: this.setState({value: 1, valueX: 1, valueY: 1}); // intensity/track
-    }
-  }
-
-
-  pickXAxis(){
-    switch (this.state.valueX){
-      case 1: {return (<XAxis
-      dataKey="track"
-      fill="#5C6BC0"
-      stroke="#333"
-      color="#5C6BC0"
-      />)}
-      case 2: {return (<XAxis
-      dataKey="duration"
-      fill="#5C6BC0"
-      stroke="#333"
-      color="#5C6BC0"
-      domain={[1, this.setlistDuration]}
-      />)}
-
-    }
-  this.setState({valueX:this.state.valueX})
-  }
-  pickYAxis(){
-    switch (this.state.valueY){
-      case 1: {return (<YAxis
+      XAxis: (<XAxis
+        dataKey="track"
+        fill="#5C6BC0"
+        stroke="#333"
+        color="#5C6BC0"
+        />),
+      YAxis: (<YAxis
         dataKey="intensity"
         allowDecimals={false}
         axisType='yAxis'
@@ -95,27 +38,141 @@ class Chart extends Component {
         stroke="#333"
         domain={[1, 7]}
         ticks={[1, 3, 5, 7]}
-        />)}
-      case 2: {return (<YAxis
-        dataKey="response"
-        allowDecimals={false}
-        axisType='yAxis'
-        type="number"
-        stroke="#333"
-        domain={[1, 7]}
-        ticks={[1, 3, 5, 7]}
-        />)}
+        />),
+    }
+    // initialize default graph
+    this.pickXAxis(1);
+    this.pickYAxis(1);
+  }
+
+
+  updateGraph(){
+    const {setlist, setlistDuration} = this.props;
+    // if (setlist){console.log(setlist[0].duration, setlistDuration)}
+    console.log('setlist in updateGraph: ', setlist)
+    let tempData = [];
+    let relativeCheck = 0 // hopefully this sums to 1
+    setlist.forEach((song, i, ss) => {
+      console.log('song in updateGraph forEach: ', song)
+      let track = i+1 // to make 1 indexed since no musician would use a 0 index setlist
+      let relativeDuration = song.duration/setlistDuration  // gets percentage of total duration
+      relativeCheck += relativeDuration
+      console.log('relativeDuration: ', relativeDuration)
+      tempData.push(Object.assign({}, song, {track: track, relativeDuration: relativeDuration}))
+      }
+    )
+    console.log('relativeCheck should ~= 1 :', relativeCheck)
+    this.setState({data: tempData})
+    // console.log('tempData after updateGraph is ',tempData)
+  }
+
+  handleChange = (event, index, value) => {
+    console.log('handleChange value ', value)
+    this.setState({value: value})
+    switch (value){
+      case 1: this.pickXAxis(1); this.pickYAxis(1); break; // intensity/track
+      case 2: this.pickXAxis(1); this.pickYAxis(2); break; // response/track
+      case 3: this.pickXAxis(2); this.pickYAxis(1); break; // intensity/minute
+      case 4: this.pickXAxis(2); this.pickYAxis(2); break; // response/minute
+      default: this.pickXAxis(1); this.pickYAxis(1); // intensity/track
+    };
+    console.log('this.state.value after handleChange is ', this.state.value)
+    this.setState({data: this.state.data}) // refresh graph
+  }
+
+// return svg markup for graph, called by dropdown handleChange
+  pickXAxis(value){
+    switch (value){
+      case 1:
+        console.log('XAxis is 1')
+        this.setState({
+          XAxis: (<XAxis
+            dataKey="track"
+            fill="#5C6BC0"
+            stroke="#333"
+            color="#5C6BC0"
+            />)
+        })
+        break;
+      case 2:
+        console.log('XAxis is 2')
+        this.setState({
+          XAxis: (<XAxis
+            dataKey="duration"
+            fill="#5C6BC0"
+            stroke="#333"
+            color="#5C6BC0"
+            domain={[1, this.setlistDuration]}
+            />)
+        })
+        break;
+      default:
+        console.error('Error in pickXAxis, default triggered')
+        this.setState({
+          XAxis: (<XAxis
+            dataKey="track"
+            fill="#5C6BC0"
+            stroke="#333"
+            color="#5C6BC0"
+            />)
+        })
+    }
+  }
+  pickYAxis(value){
+    switch (value) {
+      case 1:
+        // intensity
+        this.setState({
+          YAxis: (<YAxis
+            dataKey="intensity"
+            allowDecimals={false}
+            axisType='yAxis'
+            type="number"
+            stroke="#333"
+            domain={[1, 7]}
+            ticks={[1, 3, 5, 7]}
+            />)
+        })
+        break;
+      case 2:
+      // crowd response
+        this.setState({
+          YAxis: (<YAxis
+            dataKey="response"
+            allowDecimals={false}
+            axisType='yAxis'
+            type="number"
+            stroke="#333"
+            domain={[1, 7]}
+            ticks={[1, 3, 5, 7]}
+          />)
+        })
+        break;
+      default:
+        console.error('Error in pickYAxis, default triggered')
+        this.setState({
+          YAxis: (<YAxis
+            dataKey="intensity"
+            allowDecimals={false}
+            axisType='yAxis'
+            type="number"
+            stroke="#333"
+            domain={[1, 7]}
+            ticks={[1, 3, 5, 7]}
+            />)
+        })
     }
   }
 
-  deb = debounce(this.updateGraph, 250, true)
-  componentWillReceiveProps(){
-    this.deb();
+  debGraph = debounce(this.updateGraph, 300, true)
+  // componentWillReceiveProps(){
+  componentWillUpdate(){
+    this.debGraph();
   }
 
   render(){
     const {data} = this.state
-    console.log('axes values are ', this.state.valueX, this.state.valueY)
+    console.log('data is ', data)
 
     // console.log('graphs setlist is' , this.props.setlist)
     // console.log('dI is ', dataIntensity)
@@ -162,8 +219,8 @@ class Chart extends Component {
               </linearGradient>
             </defs>
             <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-            {this.pickXAxis()}
-            {this.pickYAxis()}
+            {this.state.XAxis}
+            {this.state.YAxis}
 
             <Area type='monotone' dataKey='intensity' stroke='#8884d8' fill='url(#colorInt)' />
           </AreaChart>

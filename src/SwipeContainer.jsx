@@ -4,12 +4,14 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {indigo400, red400, grey800} from 'material-ui/styles/colors'
-import { StickyContainer, Sticky} from 'react-sticky'
 import Setlist from './Setlist.jsx'
 import Songs from './Songs.jsx'
 import Chart from './Graphs.jsx'
 import './SwipeContainer.css'
-import Tappable from 'react-tappable'
+import img1 from './stage_empty.jpeg'
+import img2 from './stage_rainbow.jpeg'
+import img3 from './mixer1.jpeg'
+
 const styles = {
   slide: {
     padding: 15,
@@ -20,21 +22,21 @@ const styles = {
     // position: 'absolute',
   },
   slide1: {
-    background: "#cc3350 url('/img/stage_empty.jpeg') no-repeat fixed",
+    background: `#cc3350 url('${img1}') no-repeat fixed`,
     // backgroundSize: "auto 125%",
     backgroundSize: 'cover',
     backgroundPosition: "-35vw 5vh"
   },
   slide2: {
-    background: "#00ff00",
-    background: "#00ff00 url('/img/stage_rainbow.jpeg') no-repeat fixed",
+    backgroundColor: "#00ff00",
+    background: `url('${img2}') no-repeat fixed`,
     // backgroundSize: "auto 125%",
     backgroundPosition: "0vw center",
     backgroundSize: 'cover',
   },
   slide3: {
-    background: "#0000ff",
-    background: "#0000ff url('/img/mixer1.jpeg') no-repeat fixed",
+    backgroundColor: "#0000ff",
+    background: `url('${img3}') no-repeat fixed`,
     // backgroundSize: "auto 125%",
     backgroundSize: 'cover',
     backgroundPosition: "150vw center",
