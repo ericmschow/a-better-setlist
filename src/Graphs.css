@@ -1,7 +1,20 @@
 .chart {
   background-color: rgba(125, 125, 125, 0.6);
+  max-width: 80vw;
+  margin: auto;
+  border: 2px solid #ccc
   /*background: "#0000ff url('/img/mixer2.jpeg') no-repeat fixed";*/
   /*background-position: left;*/
   /*overflow:visible;*/
   /*backgroundSize: 'cover',*/
+}
+
+.recharts-wrapper .recharts-y-axis .recharts-cartesian-axis-tick text {
+  font-family: sans-serif;
+  fill: white;
+  color: white;
+}
+
+.recharts-wrapper:first-child {
+  margin: auto;
 }

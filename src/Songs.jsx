@@ -9,6 +9,7 @@ import Tooltip from 'rc-tooltip';
 import RaisedButton from 'material-ui/RaisedButton'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
+var debounce = require('debounce')
 var apikey = require("apikeygen").apikey;
 
 // this view has form modal for creating new song, and a list of all your songs
@@ -58,7 +59,8 @@ const buttonStyle = {
 const modalStyles = {
   zIndex: 10,
   marginTop: 48,
-  backgroundColor: "rgba(255, 255, 255, .8)",
+  // backgroundColor: "rgba(255, 255, 255, .8)",
+  background: "#rgba(30, 30, 30, .8) url('/img/sheets1.jpeg') no-repeat fixed",
     // top                   : '50%',
     // left                  : '25%',
     // right                 : 'auto',
@@ -105,9 +107,8 @@ class Songs extends Component {
       editSongIntensity: '',
     }
     this.openAddModal = this.openAddModal.bind(this);
-    this.closeAddModal = this.closeAddModal.bind(this);
+    this.closeModals = this.closeModals.bind(this);
     this.openEditModal = this.openEditModal.bind(this);
-    this.closeEditModal = this.closeEditModal.bind(this);
     // console.log("props is ", props)
     // console.log('this.songs is ', this.state.songsStored)
     // console.log('song 1 is ', this.state.songsStored[1])
@@ -129,16 +130,13 @@ class Songs extends Component {
     this.props.setlist.forEach((song)=> {
       totalDuration += song.duration
     })
+    console.log('updateSetlistDuration', totalDuration)
     // console.log('total duration is ', totalDuration)
     this.props.callbackToUpdateDur(totalDuration)
   }
 
   openAddModal() {
     this.setState({modalAddIsOpen: true});
-  }
-
-  closeAddModal() {
-    this.setState({modalAddIsOpen: false});
   }
 
   openEditModal(song) {
@@ -154,8 +152,9 @@ class Songs extends Component {
       });
   }
 
-  closeEditModal() {
-    this.setState({modalEditIsOpen: false});
+// set both modals to closed to help prevent glitch with modalAdd not resetting
+  closeModals() {
+    this.setState({modalEditIsOpen: false, modalAddIsOpen: false});
   }
 
   convertDurToString(input){
@@ -165,6 +164,8 @@ class Songs extends Component {
     let durString = minutes.toString() + ":" + seconds
     return durString
   }
+
+  debDur = debounce(this.updateDur, 350, false)
 
   tapSong(song) {
     const {songsSelected} = this.state;
@@ -181,7 +182,7 @@ class Songs extends Component {
       newSongs.push(song.id)
     }
     this.updateSetlist(newSongs)
-    this.updateDur()
+    this.debDur()
   }
 
   addSong() {
@@ -213,6 +214,7 @@ class Songs extends Component {
 
   editSong() {
     var {songsStored} = this.state;
+    console.log('edit song')
     let newSong = {
       id: this.state.editSongId,
       name: this.state.editSongName,
@@ -236,7 +238,9 @@ class Songs extends Component {
   // stretch goal - add animation
   deleteSong(){
     var {songsStored} = this.state;
-    let index=songsStored.indexOf(this.state.oldSong);
+    console.log('delete song')
+    let index = songsStored.indexOf(this.state.oldSong);
+    console.log('index is ', index)
     songsStored.splice(index, 1);
     let newState = Object.assign(
       {},
@@ -336,22 +340,23 @@ class Songs extends Component {
         )
       }
     })
+    // actually return
     return (
       <div>
         <Modal
           isOpen={this.state.modalEditIsOpen}
-          onRequestClose={this.closeEditModal}
+          onRequestClose={this.closeModals}
           style={modalStyles}
           contentLabel="Edit Song"
           >
           <h2>Edit Song</h2>
           <form style={{backgroundColor: "#fff"}}>
-              <br/>
-              <TextField
-                style={{size: '1.5em'}}
-                hintText="Song name"
-                value={this.state.editSongName}
-                onChange={event => this.handleChange(event, 'editSongName')} />
+            <br/>
+            <TextField
+              style={{size: '1.5em'}}
+              hintText="Song name"
+              value={this.state.editSongName}
+              onChange={event => this.handleChange(event, 'editSongName')} />
             <br/> <br/>
             <label>
               Length: {this.convertDurToString(this.state.editSongDuration)}
@@ -377,13 +382,18 @@ class Songs extends Component {
             primary={true}
             style={{position:'absolute', bottom: 100, width: '85%'}}
             onClick={()=>this.editSong()}
-          />
+            />
           <br/>
           <br/>
-          <Tappable onPress={()=>this.deleteSong()}>
+          <Tappable
+            style={{backgroundColor: "#ef5350"}}
+            preventDefault={true}
+            onPress={()=>this.deleteSong()}>
             <RaisedButton
               label='Hold to Delete'
-              secondary={true}
+              disabled={true}
+              disabledBackgroundColor="#ef5350"
+              disabledLabelColor="#fff"
               style={{position:'absolute', bottom: 40, width: '85%'}}
             />
           </Tappable>
@@ -394,7 +404,7 @@ class Songs extends Component {
 
         <Modal
           isOpen={this.state.modalAddIsOpen}
-          onRequestClose={this.closeAddModal}
+          onRequestClose={this.closeModals}
           style={modalStyles}
           contentLabel="Add Song"
           >
@@ -442,7 +452,7 @@ class Songs extends Component {
 
         <ul style={ListStyle}>
           <li className="songClass">
-            <Tappable onTap={this.openAddModal}>
+            <Tappable onTap={()=>this.openAddModal()}>
                 <strong>Add a new song!</strong>
                 <br/>Press here
             </Tappable>
