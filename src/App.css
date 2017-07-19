@@ -7,20 +7,16 @@
 }
 
 .App-header {
-  background-color: #222;
-  background: url("/img/crowd1.jpeg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center -13vh;
+
   border-bottom: 2px solid #333;
+  font-family: 'Special Elite', cursive;
   top: 0;
   left: 0;
   right: 0;
   height: 100px;
   padding: 0px;
-  font-size: 2em;
-  font-family: cursive;
-  color: #333;
+  font-size: 1.5em;
+  color: #111;
 }
 
 .App-header ul {

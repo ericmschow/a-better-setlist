@@ -24,6 +24,7 @@ class Chart extends Component {
       showToolTip: false,
       windowWidth: initialWidth - 100,
       value: 1,
+      areaKey: 'intensity',
       XAxis: (<XAxis
         dataKey="track"
         fill="#5C6BC0"
@@ -117,6 +118,7 @@ class Chart extends Component {
             />)
         })
     }
+    this.setState({data: this.state.data});
   }
   pickYAxis(value){
     switch (value) {
@@ -131,8 +133,10 @@ class Chart extends Component {
             stroke="#333"
             domain={[1, 7]}
             ticks={[1, 3, 5, 7]}
-            />)
+            />),
+          areaKey: "intensity",
         })
+        this.setState({data: this.state.data})
         break;
       case 2:
       // crowd response
@@ -145,8 +149,10 @@ class Chart extends Component {
             stroke="#333"
             domain={[1, 7]}
             ticks={[1, 3, 5, 7]}
-          />)
+          />),
+          areaKey: "response",
         })
+        this.setState({data: this.state.data})
         break;
       default:
         console.error('Error in pickYAxis, default triggered')
@@ -159,7 +165,8 @@ class Chart extends Component {
             stroke="#333"
             domain={[1, 7]}
             ticks={[1, 3, 5, 7]}
-            />)
+            />),
+          areaKey: "intensity",
         })
     }
   }
@@ -204,7 +211,7 @@ class Chart extends Component {
           >
           <MenuItem value={1} primaryText="Intensity per Song" />
           <MenuItem value={2} primaryText="Response per Song"/>
-          <MenuItem value={3} primaryText="Intensity per Minute"/>
+          <MenuItem value={3} primaryText="Intensity per Minute" disabled={true}/>
           <MenuItem value={4} primaryText="Response per Minute" disabled={true}/>
         </DropDownMenu>
 
@@ -222,7 +229,7 @@ class Chart extends Component {
             {this.state.XAxis}
             {this.state.YAxis}
 
-            <Area type='monotone' dataKey='intensity' stroke='#8884d8' fill='url(#colorInt)' />
+            <Area type='monotone' dataKey={this.state.areaKey} stroke='#8884d8' fill='url(#colorInt)' />
           </AreaChart>
         </ResponsiveContainer>
 

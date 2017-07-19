@@ -16,6 +16,7 @@ const styles = {
   slide: {
     padding: 15,
     height: '100vh',
+    // height: document.documentElement.clientHeight - 130,
     color: '#fff',
     borderLeft: "1px solid #333",
     borderRight: "1px solid #333",
