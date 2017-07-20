@@ -280,9 +280,9 @@ class Songs extends Component {
     }
     // put back to normal if songs deleted
     else {
-      SongStyle = Object.assign({}, SongStyle, {
-        width: '90%'
-      });
+      // SongStyle = Object.assign({}, SongStyle, {
+      //   width: '90%'
+      // });
       SelectedStyle = Object.assign({}, SongStyle, {
         backgroundColor: 'white',
         boxShadow: "0 0 3px 3px lightblue",
