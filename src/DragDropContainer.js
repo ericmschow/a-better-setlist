@@ -23,83 +23,38 @@ class DragDropContainer extends Component {
       songsSelected: props.songsSelected,
       songsStored: props.songsStored,
       setlist: [],
-      cards:   [
-          {
-            id: 1,
-            text: 'Write a cool JS library',
-          }, {
-            id: 2,
-            text: 'Make it generic enough',
-          }, {
-            id: 3,
-            text: 'Write README',
-          }, {
-            id: 4,
-            text: 'Create some examples',
-          }, {
-            id: 5,
-            text: 'Spam in Twitter and IRC to promote it (note that this element is taller than the others)',
-          }, {
-            id: 6,
-            text: '???',
-          }, {
-            id: 7,
-            text: 'PROFIT',
-          }
-        ],
     }
-    // for (let i = 0; i < this.state.songsSelected.length; i++) {
-    //   setlist.push(this.state.songsStored[this.state.songsSelected[i]])
-    // }
-
-    // let setlist=[];
-    // this.state.songsSelected.forEach((songid, i, ss) => {
-    //   setlist.push(this.state.songsStored.find(x => x.id === songid ))
-    // })
-    // this.state = Object.assign({}, this.state, {setlist: setlist})
-
-    //console.log('dragdrop this setlist is ', this.state.setlist)
-    // console.log('dragdrop end of constructor state is ', this.state)
   };
 
 
   moveCard(dragIndex, hoverIndex) {
-    // console.log('moveCard beginning state is ', this.state)
-    // console.log('moveCard songs is ', setlist)
     const dragCard = this.props.setlist[dragIndex];
-
     this.props.setlist.splice(dragIndex, 1);
     this.props.setlist.splice(hoverIndex, 0, dragCard);
     this.props.callbackWithSetlist();
-    // console.log('State after moveCard is now ', this.state.setlist)
   }
 
   updateSetlist(){
-    //let setlist = [];
     this.state.songsSelected.forEach((songid, i, ss) => {
-      // console.log('ss foreach songid: ', i, songid)
       this.props.setlist.push(this.state.songsStored.find(x => x.id === songid ))
     })
-    //this.setState({setlist: setlist})
-    // console.log('setlist updated')
     this.props.callbackWithSetlist()
-    // this.state = Object.assign({}, this.state, {setlist: setlist})
   }
-
-  updateCombo(){
-    this.updateSetlist();
-    this.updateDur(this.props.setlist);
-  }
-
-  debProps = debounce(this.updateCombo, 250, true)
-  componentWillReceiveProps(){
-    //this.debProps();
-  }
-  debSetlist = debounce(this.props.callbackWithSetlist, 350, false)
-  componentWillUpdate(){
-  //  console.log(this.props);
-  //   this.debSetlist(this.state.setlist);
-  }
+  // 
+  // updateCombo(){
+  //   this.updateSetlist();
+  //   this.updateDur(this.props.setlist);
+  // }
+  //
+  // debProps = debounce(this.updateCombo, 250, true)
+  // componentWillReceiveProps(){
+  //   this.debProps();
+  // }
+  // debSetlist = debounce(this.props.callbackWithSetlist, 350, false)
+  // componentWillUpdate(){
+  // //  console.log(this.props);
+  // //   this.debSetlist(this.state.setlist);
+  // }
 
   render() {
     const { songsStored, songsSelected, setlist } = this.state;

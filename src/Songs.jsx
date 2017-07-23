@@ -107,6 +107,7 @@ class Songs extends Component {
       editSongDuration: '',
       editSongIntensity: '',
       editSongResponse: '',
+      errorModalClassName: 'hidden',
     }
     this.openAddModal = this.openAddModal.bind(this);
     this.closeModals = this.closeModals.bind(this);
@@ -189,16 +190,22 @@ class Songs extends Component {
   }
 
   addSong() {
+    // called via addModal submit button
+    // prevent empty string
+    if (this.state.formSongName.length === 0){
+      this.setState({errorModalClassName: 'visible'})
+      return;
+    }
     var {songsStored} = this.state;
     let newSong = {
-      id: apikey(10),
-      name: this.state.formSongName,
+      id: apikey(10),   // generate random ID
+      name: this.state.formSongName,    // get info from form
       duration: this.state.formSongDuration,
       intensity: this.state.formSongIntensity,
       response: this.state.formSongResponse,
       durString: this.convertDurToString(this.state.formSongDuration),
     }
-    songsStored.push(newSong)
+    songsStored.push(newSong)   // add to memory array
     // reset state to have default song info for next time
     let newState = Object.assign(
       {},
@@ -211,16 +218,16 @@ class Songs extends Component {
       {modalAddIsOpen: false},
       )
     this.setState(newState)
-    localStorage.songs = JSON.stringify(songsStored)
-    // called via submit button
-    // adds song to localStorage
-    // sets state
-
+    localStorage.songs = JSON.stringify(songsStored)  // store memory array
   }
 
   editSong() {
+    // called via editModal submit button
+    if (this.state.editSongName.length === 0){
+      this.setState({errorModalClassName: 'visible'})
+      return;
+    }
     var {songsStored} = this.state;
-    console.log('edit song')
     let newSong = {
       id: this.state.editSongId,
       name: this.state.editSongName,
@@ -237,6 +244,7 @@ class Songs extends Component {
       this.state,
       {songsStored: songsStored},
       {modalEditIsOpen: false},
+      {errorModalClassName: 'hidden'},
       )
     this.setState(newState)
     localStorage.songs = JSON.stringify(songsStored)
@@ -319,10 +327,10 @@ class Songs extends Component {
             onPress={(event) => this.openEditModal(s)}>
             <li
               key={s.id}
-              style={SelectedStyle} >
+              style={SelectedStyle}
+            >
               <strong>{s.name}</strong>
               <br/>
-
               {s.durString} | Intensity: {s.intensity}/7 | Response: {s.response}/7
             </li>
           </Tappable>
@@ -337,7 +345,8 @@ class Songs extends Component {
             onPress={(event) => this.openEditModal(s)}>
             <li
               key={s.id}
-              style={SongStyle} >
+              style={SongStyle}
+            >
               <strong>{s.name}</strong>
               <br/>
 
@@ -355,7 +364,7 @@ class Songs extends Component {
           onRequestClose={this.closeModals}
           style={modalStyles}
           contentLabel="Edit Song"
-          >
+        >
           <h2>Edit Song</h2>
           <form style={{backgroundColor: "#fff"}}>
             <br/>
@@ -363,7 +372,10 @@ class Songs extends Component {
               style={{size: '1.5em'}}
               hintText="Song name"
               value={this.state.editSongName}
-              onChange={event => this.handleChange(event, 'editSongName')} />
+              maxLength={20}
+              minLength={1}
+              onChange={event => this.handleChange(event, 'editSongName')}
+            />
             <br/> <br/>
             <label>
               Length: {this.convertDurToString(this.state.editSongDuration)}
@@ -371,7 +383,7 @@ class Songs extends Component {
                 min={1} max={1500}
                 value={this.state.editSongDuration}
                 onChange={value => this.handleSliderChange(value, "editSongDuration")}
-                />
+              />
             </label>
             <br/>
             <label>
@@ -381,7 +393,7 @@ class Songs extends Component {
                 handle={handle}
                 value={this.state.editSongIntensity}
                 onChange={value => this.handleSliderChange(value, "editSongIntensity")}
-                />
+              />
             </label>
             <br/>
             <label>
@@ -391,7 +403,7 @@ class Songs extends Component {
                 handle={handle}
                 value={this.state.editSongResponse}
                 onChange={value => this.handleSliderChange(value, "editSongResponse")}
-                />
+              />
             </label>
           </form>
           <RaisedButton
@@ -399,7 +411,7 @@ class Songs extends Component {
             primary={true}
             style={{position:'absolute', bottom: 100, width: '85%'}}
             onClick={()=>this.editSong()}
-            />
+          />
           <br/>
           <br/>
           <Tappable
@@ -414,60 +426,55 @@ class Songs extends Component {
               style={{position:'absolute', bottom: 40, width: '85%'}}
             />
           </Tappable>
-
         </Modal>
-
-
-
         <Modal
           isOpen={this.state.modalAddIsOpen}
           onRequestClose={this.closeModals}
           style={modalStyles}
           contentLabel="Add Song"
-          >
-
+        >
           <h2>Add Song</h2>
-
           <form>
-              <br/>
-                <TextField
-                  hintText="Song name"
-                value={this.state.formSongName}
-                onChange={event => this.handleChange(event, 'formSongName')} />
-            <br/> <br/>
+            <br/>
+            <TextField
+              hintText="Song name"
+              value={this.state.formSongName}
+              maxLength={20}
+              onChange={event => this.handleChange(event, 'formSongName')}
+            />
+            <br/>
+            <p className="hidden">
+              Sorry, your song must have a name!
+            </p>
+            <br/>
             <p style={{marginBottom: ".5em"}}>
               Length: {this.convertDurToString(this.state.formSongDuration)}
             </p>
-
-              <Slider
-                min={1} max={1500}
-                value={this.state.formSongDuration}
-                onChange={value => this.handleSliderChange(value, "formSongDuration")}
-                />
-
+            <Slider
+              min={1} max={1500}
+              value={this.state.formSongDuration}
+              onChange={value => this.handleSliderChange(value, "formSongDuration")}
+            />
             <br/>
             <p style={{marginBottom: '.5em'}}>
               Song Intensity: {this.state.formSongIntensity} / 7
             </p>
-
-              <Slider
-                min={1} max={7} step={1}
-                handle={handle}
-                value={this.state.formSongIntensity}
-                onChange={value => this.handleSliderChange(value, "formSongIntensity")}
-                />
+            <Slider
+              min={1} max={7} step={1}
+              handle={handle}
+              value={this.state.formSongIntensity}
+              onChange={value => this.handleSliderChange(value, "formSongIntensity")}
+            />
             <br/>
             <p style={{marginBottom: '.5em'}}>
               Crowd Response: {this.state.formSongResponse} / 7
             </p>
-
-              <Slider
-                min={1} max={7} step={1}
-                handle={handle}
-                value={this.state.formSongResponse}
-                onChange={value => this.handleSliderChange(value, "formSongResponse")}
-                />
-
+            <Slider
+              min={1} max={7} step={1}
+              handle={handle}
+              value={this.state.formSongResponse}
+              onChange={value => this.handleSliderChange(value, "formSongResponse")}
+            />
           </form>
           <RaisedButton
             style={{position:'absolute', bottom: 40, width: '85%'}}
@@ -476,8 +483,8 @@ class Songs extends Component {
             onClick={()=>this.addSong()}
           />
         </Modal>
-        {instructions}
 
+        {instructions}
         <ul style={ListStyle}>
           <Tappable onTap={()=>this.openAddModal()}>
             <li className="songClass">
