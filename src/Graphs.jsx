@@ -186,7 +186,7 @@ class Chart extends Component {
 
       if (this.state.songsSelected.length < 2) {
         return(
-        <div style={{margin: "1em" }} className="chart">
+        <div className="chart">
           <p>You need at least two songs in your setlist to draw graphs!<br/><br/> Swipe back and click on some.</p>
         </div>
       )}
