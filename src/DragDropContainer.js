@@ -40,7 +40,7 @@ class DragDropContainer extends Component {
     })
     this.props.callbackWithSetlist()
   }
-  // 
+  //
   // updateCombo(){
   //   this.updateSetlist();
   //   this.updateDur(this.props.setlist);
@@ -82,4 +82,4 @@ class DragDropContainer extends Component {
   }
 }
 // export default DragDropContext(HTML5Backend)(Container)
-export default DragDropContext(TouchBackend)(DragDropContainer)
+export default DragDropContext(TouchBackend({enableMouseEvents: true}))(DragDropContainer)

@@ -47,16 +47,6 @@ var SelectedStyle = Object.assign({}, SongStyle, {
     boxShadow: "0 0 3px 3px lightblue",
   });
 
-const buttonStyle = {
-  border: "3px solid grey",
-  borderRadius: 5,
-  margin: "auto",
-  marginTop: 10,
-  fontSize: "2.5em",
-  position: 'absolute',
-  bottom: 20,
-}
-
 const modalStyles = {
   zIndex: 10,
   marginTop: 48,
@@ -105,9 +95,9 @@ class Songs extends Component {
       formSongResponse: 4,
       editSongId: '',
       editSongName: '',
-      editSongDuration: '',
-      editSongIntensity: '',
-      editSongResponse: '',
+      editSongDuration: 200,
+      editSongIntensity: 4,
+      editSongResponse: 4,
       errorModalClassName: 'hidden',
     }
     this.openAddModal = this.openAddModal.bind(this);
@@ -274,7 +264,6 @@ class Songs extends Component {
   }
 
   handleSliderChange(event, value, key) {
-    console.log(arguments)
     this.setState({[key]: value})
   }
 
@@ -300,6 +289,7 @@ class Songs extends Component {
       });
     }
   }
+
 
   render() {
     let songRenderArray = []

@@ -9,12 +9,10 @@ var debounce = require('debounce')
 // Setlist is an array of Song objects
 // Needs to be an array, as setlists are ordered
 // Songs have:
-//  id
-//  duration
-//  intensity
-//
-// Setlist allows import/export of setlist to localStorage
-
+//  id, 10character random key
+//  duration, in seconds, max of 1500 
+//  intensity, 1-7 representing how intense the song is
+//  response, 1-7 representing how crowd responds to song
 const setlistNameStyle = {
   fontSize:'1.3em',
   textAlign: 'center',
