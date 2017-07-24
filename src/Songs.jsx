@@ -4,9 +4,10 @@ import TextField from 'material-ui/TextField'
 // import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import './Songs.css';
-import Slider from 'rc-slider';
-import Tooltip from 'rc-tooltip';
+// import Slider from 'rc-slider';
+// import Tooltip from 'rc-tooltip';
 import RaisedButton from 'material-ui/RaisedButton'
+import Slider from 'material-ui/Slider'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
 var debounce = require('debounce')
@@ -46,16 +47,6 @@ var SelectedStyle = Object.assign({}, SongStyle, {
     boxShadow: "0 0 3px 3px lightblue",
   });
 
-const buttonStyle = {
-  border: "3px solid grey",
-  borderRadius: 5,
-  margin: "auto",
-  marginTop: 10,
-  fontSize: "2.5em",
-  position: 'absolute',
-  bottom: 20,
-}
-
 const modalStyles = {
   zIndex: 10,
   marginTop: 48,
@@ -70,24 +61,24 @@ const modalStyles = {
 
 };
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
-const Range = createSliderWithTooltip(Slider.Range);
-const Handle = Slider.Handle;
-
-const handle = (props) => {
-  const { value, dragging, index, ...restProps } = props;
-  return (
-    <Tooltip
-      prefixCls="rc-slider-tooltip"
-      overlay={value}
-      visible={dragging}
-      placement="top"
-      key={index}
-    >
-      <Handle value={value} {...restProps} />
-    </Tooltip>
-  );
-};
+// const createSliderWithTooltip = Slider.createSliderWithTooltip;
+// const Range = createSliderWithTooltip(Slider.Range);
+// const Handle = Slider.Handle;
+//
+// const handle = (props) => {
+//   const { value, dragging, index, ...restProps } = props;
+//   return (
+//     <Tooltip
+//       prefixCls="rc-slider-tooltip"
+//       overlay={value}
+//       visible={dragging}
+//       placement="top"
+//       key={index}
+//     >
+//       <Handle value={value} {...restProps} />
+//     </Tooltip>
+//   );
+// };
 
 class Songs extends Component {
   constructor(props){
@@ -104,9 +95,9 @@ class Songs extends Component {
       formSongResponse: 4,
       editSongId: '',
       editSongName: '',
-      editSongDuration: '',
-      editSongIntensity: '',
-      editSongResponse: '',
+      editSongDuration: 200,
+      editSongIntensity: 4,
+      editSongResponse: 4,
       errorModalClassName: 'hidden',
     }
     this.openAddModal = this.openAddModal.bind(this);
@@ -142,9 +133,10 @@ class Songs extends Component {
     this.setState({modalAddIsOpen: true});
   }
 
-  openEditModal(song) {
+  openEditModal(song, event) {
     // opens edit modal with selected song as default
     // will not overwrite partially completed song in Add modal
+    event.preventDefault()
     this.setState({
         oldSong: song,
         editSongId: song.id,
@@ -271,7 +263,7 @@ class Songs extends Component {
     this.setState({[key]: event.target.value});
   }
 
-  handleSliderChange(value, key) {
+  handleSliderChange(event, value, key) {
     this.setState({[key]: value})
   }
 
@@ -297,6 +289,7 @@ class Songs extends Component {
       });
     }
   }
+
 
   render() {
     let songRenderArray = []
@@ -324,7 +317,7 @@ class Songs extends Component {
             key={s.id}
             preventDefault={true}
             onTap={(event) => this.tapSong(s)}
-            onPress={(event) => this.openEditModal(s)}>
+            onPress={(event) => this.openEditModal(s, event)}>
             <li
               key={s.id}
               style={SelectedStyle}
@@ -342,7 +335,7 @@ class Songs extends Component {
             key={s.id}
             preventDefault={true}
             onTap={(event) => this.tapSong(s)}
-            onPress={(event) => this.openEditModal(s)}>
+            onPress={(event) => this.openEditModal(s, event)}>
             <li
               key={s.id}
               style={SongStyle}
@@ -376,36 +369,36 @@ class Songs extends Component {
               minLength={1}
               onChange={event => this.handleChange(event, 'editSongName')}
             />
-            <br/> <br/>
+            <br/>
             <label>
               Length: {this.convertDurToString(this.state.editSongDuration)}
               <Slider
+                sliderStyle={{marginBottom: "36px"}}
                 min={1} max={1500}
                 value={this.state.editSongDuration}
-                onChange={value => this.handleSliderChange(value, "editSongDuration")}
+                onChange={(event, value) => this.handleSliderChange(event, value, "editSongDuration")}
               />
             </label>
-            <br/>
             <label>
               Song Intensity: {this.state.editSongIntensity} / 7
               <Slider
+                sliderStyle={{marginBottom: "36px"}}
                 min={1} max={7} step={1}
-                handle={handle}
                 value={this.state.editSongIntensity}
-                onChange={value => this.handleSliderChange(value, "editSongIntensity")}
+                onChange={(event, value) => this.handleSliderChange(event, value, "editSongIntensity")}
               />
             </label>
-            <br/>
             <label>
               Crowd Response: {this.state.editSongResponse} / 7
               <Slider
+                sliderStyle={{marginBottom: "36px"}}
                 min={1} max={7} step={1}
-                handle={handle}
                 value={this.state.editSongResponse}
                 onChange={value => this.handleSliderChange(value, "editSongResponse")}
               />
             </label>
           </form>
+          <br/>
           <RaisedButton
             label='Tap to Save'
             primary={true}
@@ -455,23 +448,23 @@ class Songs extends Component {
               value={this.state.formSongDuration}
               onChange={value => this.handleSliderChange(value, "formSongDuration")}
             />
-            <br/>
+
             <p style={{marginBottom: '.5em'}}>
               Song Intensity: {this.state.formSongIntensity} / 7
             </p>
             <Slider
               min={1} max={7} step={1}
-              handle={handle}
+
               value={this.state.formSongIntensity}
               onChange={value => this.handleSliderChange(value, "formSongIntensity")}
             />
-            <br/>
+
             <p style={{marginBottom: '.5em'}}>
               Crowd Response: {this.state.formSongResponse} / 7
             </p>
             <Slider
               min={1} max={7} step={1}
-              handle={handle}
+
               value={this.state.formSongResponse}
               onChange={value => this.handleSliderChange(value, "formSongResponse")}
             />
