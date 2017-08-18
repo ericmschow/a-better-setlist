@@ -5,12 +5,16 @@ import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import './Setlist.css'
 import jsPDF from 'jspdf'
+
+var fs = require('fs');
+
 var debounce = require('debounce')
+var axios = require('axios')
 // Setlist is an array of Song objects
 // Needs to be an array, as setlists are ordered
 // Songs have:
 //  id, 10character random key
-//  duration, in seconds, max of 1500 
+//  duration, in seconds, max of 1500
 //  intensity, 1-7 representing how intense the song is
 //  response, 1-7 representing how crowd responds to song
 const setlistNameStyle = {
@@ -71,13 +75,13 @@ class Setlist extends Component {
     this.setState({[key]: event.target.value});
   }
 
-  writePDF(){
+  createPDF(){
     // dims 210 x 297 mm wxh
     const {setlist} = this.props
     console.log(setlist)
     let doc = new jsPDF();
     let name = this.state.setlistName
-    let filename = name.toLowerCase().split(' ').join('_') + '.pdf'
+    // let filename = name.toLowerCase().split(' ').join('_') + '.pdf'
     doc.setFontSize(48)
     if (name.length > 22) {doc.setFontSize(36)}
     doc.setFontStyle('bold')
@@ -118,12 +122,22 @@ class Setlist extends Component {
     doc.setFontSize(10)
     doc.text('This setlist was created using the free app available at https://setlist.ericmschow.com!', 20, 275)
     // maybe draw rect around
+    return doc
+  }
+  savePDF(doc) {
+  let filename = this.state.setlistName.toLowerCase().split(' ').join('_') + '.pdf'
     doc.save(filename)
   }
 
-  debWritePDF = debounce(()=>{this.writePDF()}, 1000, true)
+  debWritePDF = debounce(()=>{this.savePDF(this.createPDF())}, 1000, true)
 
+  driveUpload(){
+    let upload_url = 'https://www.googleapis.com/upload/drive/v2?uploadType=media'
+    let mime = "application/pdf"
+    axios.post
+  }
 
+  debDriveUpload = debounce(()=>{this.driveUpload()}, 1000, true)
   render(){
     //console.log('songsSelected in setlist render is ', this.state.songsSelected)
     if (this.state.songsSelected.length === 0){
@@ -200,7 +214,15 @@ class Setlist extends Component {
             primary={true}
             width="90%"
             style={{marginBottom: "1rem"}}
-            onClick={()=>this.debWritePDF()} label="Download Setlist"/>
+            onClick={()=>this.debWritePDF()} label="Download Setlist"
+          />
+        {/*}<RaisedButton
+            primary={true}
+            width={"90%"}
+            style={{marginBottom: "1rem"}}
+            onClick={()=>this.debDriveUpload()}
+            label="Export to Google Drive"
+          /> */}
         </div>
       )
     }

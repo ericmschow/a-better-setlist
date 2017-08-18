@@ -11,7 +11,10 @@ const style = {
   width: '90%',
   margin: 'auto',
   color: 'black',
-
+  userSelect: "none",
+  MozUserSelect:'none',
+  WebkitUserSelect:'none',
+  msUserSelect:'none',
 };
 
 class DragDropContainer extends Component {
@@ -40,28 +43,9 @@ class DragDropContainer extends Component {
     })
     this.props.callbackWithSetlist()
   }
-  //
-  // updateCombo(){
-  //   this.updateSetlist();
-  //   this.updateDur(this.props.setlist);
-  // }
-  //
-  // debProps = debounce(this.updateCombo, 250, true)
-  // componentWillReceiveProps(){
-  //   this.debProps();
-  // }
-  // debSetlist = debounce(this.props.callbackWithSetlist, 350, false)
-  // componentWillUpdate(){
-  // //  console.log(this.props);
-  // //   this.debSetlist(this.state.setlist);
-  // }
 
   render() {
     const { songsStored, songsSelected, setlist } = this.state;
-    // const { songsStored, songsSelected} = this.state;
-    // console.log('songsSelected in DDC render is ', songsSelected)
-    // console.log('ddc render setlist ', setlist)
-    // this.debSetlist(setlist)
     return (
       <div style={style}>
         {this.props.setlist.map((song, i) => (
@@ -81,5 +65,5 @@ class DragDropContainer extends Component {
     );
   }
 }
-// export default DragDropContext(HTML5Backend)(Container)
+// export default DragDropContext(HTML5Backend)(DragDropContainer)
 export default DragDropContext(TouchBackend({enableMouseEvents: true}))(DragDropContainer)

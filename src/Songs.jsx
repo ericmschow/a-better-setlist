@@ -10,28 +10,23 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Slider from 'material-ui/Slider'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
+import moment from 'moment';
 var debounce = require('debounce')
 var apikey = require("apikeygen").apikey;
 
-// this view has form modal for creating new song, and a list of all your songs
+// this view has form modals for creating/editing songs, and a list of all your songs
 // stretch goal = sorting options, default alphabetically
 
 // allows single touch to select a song
-// "Make a Setlist from these songs" button sends array to setlist component
 
 const ListStyle = {
   width: '90%',
   padding: 0,
   margin: 'auto',
   color: 'black',
-  // display: 'flex',
-  // flexFlow: "row wrap",
-
 };
 
 var SongStyle = {
-  // flex: "0 1 auto",
-  // display: 'inlineBlock',
   border: '1px solid gray',
   borderRadius: 3,
   padding: '0.5rem 1rem',
@@ -50,35 +45,8 @@ var SelectedStyle = Object.assign({}, SongStyle, {
 const modalStyles = {
   zIndex: 10,
   marginTop: 48,
-  // backgroundColor: "rgba(255, 255, 255, .8)",
   background: "#rgba(30, 30, 30, .8) url('/img/sheets1.jpeg') no-repeat fixed",
-    // top                   : '50%',
-    // left                  : '25%',
-    // right                 : 'auto',
-    // bottom                : 'auto',
-    // marginRight           : '-50%',
-    // transform             : 'translate(-50%, -50%)'
-
 };
-
-// const createSliderWithTooltip = Slider.createSliderWithTooltip;
-// const Range = createSliderWithTooltip(Slider.Range);
-// const Handle = Slider.Handle;
-//
-// const handle = (props) => {
-//   const { value, dragging, index, ...restProps } = props;
-//   return (
-//     <Tooltip
-//       prefixCls="rc-slider-tooltip"
-//       overlay={value}
-//       visible={dragging}
-//       placement="top"
-//       key={index}
-//     >
-//       <Handle value={value} {...restProps} />
-//     </Tooltip>
-//   );
-// };
 
 class Songs extends Component {
   constructor(props){
@@ -103,20 +71,6 @@ class Songs extends Component {
     this.openAddModal = this.openAddModal.bind(this);
     this.closeModals = this.closeModals.bind(this);
     this.openEditModal = this.openEditModal.bind(this);
-    // console.log("props is ", props)
-    // console.log('this.songs is ', this.state.songsStored)
-    // console.log('song 1 is ', this.state.songsStored[1])
-    // if (this.state.songsStored.length > 6) {
-    //   console.log('more than 6 songs')
-    //   SongStyle = Object.assign({}, SongStyle, {
-    //     width: '30%',
-    //     float: 'left',
-    //   });
-    //   SelectedStyle = Object.assign({}, SongStyle, {
-    //     backgroundColor: 'white',
-    //     boxShadow: "0 0 3px 3px lightblue",
-    //   });
-    // }
   }
 
   updateDur(){
@@ -124,7 +78,6 @@ class Songs extends Component {
     this.props.setlist.forEach((song)=> {
       totalDuration += song.duration
     })
-    console.log('updateSetlistDuration', totalDuration)
     // console.log('total duration is ', totalDuration)
     this.props.callbackToUpdateDur(totalDuration)
   }
@@ -155,9 +108,12 @@ class Songs extends Component {
 
   convertDurToString(input){
     let minutes = Math.floor(input/60);
-    let seconds = (input%60).toString()
-    seconds = seconds.length == 1 ? '0'+seconds : seconds
+    let seconds = Math.floor(input%60)
+    seconds = seconds < 10 ? '0'+seconds.toString() : seconds.toString()
     let durString = minutes.toString() + ":" + seconds
+    // let date = moment(input, 'mm:ss')
+    // console.log(date)
+    // let durString = 5
     return durString
   }
 
@@ -394,7 +350,7 @@ class Songs extends Component {
                 sliderStyle={{marginBottom: "36px"}}
                 min={1} max={7} step={1}
                 value={this.state.editSongResponse}
-                onChange={value => this.handleSliderChange(value, "editSongResponse")}
+                onChange={(event, value) => this.handleSliderChange(event, value, "editSongResponse")}
               />
             </label>
           </form>
@@ -446,7 +402,7 @@ class Songs extends Component {
             <Slider
               min={1} max={1500}
               value={this.state.formSongDuration}
-              onChange={value => this.handleSliderChange(value, "formSongDuration")}
+              onChange={(event, value) => this.handleSliderChange(event, value, "formSongDuration")}
             />
 
             <p style={{marginBottom: '.5em'}}>
@@ -454,9 +410,8 @@ class Songs extends Component {
             </p>
             <Slider
               min={1} max={7} step={1}
-
               value={this.state.formSongIntensity}
-              onChange={value => this.handleSliderChange(value, "formSongIntensity")}
+              onChange={(event, value) => this.handleSliderChange(event, value, "formSongIntensity")}
             />
 
             <p style={{marginBottom: '.5em'}}>
@@ -464,9 +419,8 @@ class Songs extends Component {
             </p>
             <Slider
               min={1} max={7} step={1}
-
               value={this.state.formSongResponse}
-              onChange={value => this.handleSliderChange(value, "formSongResponse")}
+              onChange={(event, value) => this.handleSliderChange(event, value, "formSongResponse")}
             />
           </form>
           <RaisedButton
