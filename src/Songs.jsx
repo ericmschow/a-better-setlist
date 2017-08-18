@@ -10,6 +10,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Slider from 'material-ui/Slider'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap.css';
+import moment from 'moment';
 var debounce = require('debounce')
 var apikey = require("apikeygen").apikey;
 
@@ -77,7 +78,6 @@ class Songs extends Component {
     this.props.setlist.forEach((song)=> {
       totalDuration += song.duration
     })
-    console.log('updateSetlistDuration', totalDuration)
     // console.log('total duration is ', totalDuration)
     this.props.callbackToUpdateDur(totalDuration)
   }
@@ -108,9 +108,12 @@ class Songs extends Component {
 
   convertDurToString(input){
     let minutes = Math.floor(input/60);
-    let seconds = (input%60).toString()
-    seconds = seconds.length == 1 ? '0'+seconds : seconds
+    let seconds = Math.floor(input%60)
+    seconds = seconds < 10 ? '0'+seconds.toString() : seconds.toString()
     let durString = minutes.toString() + ":" + seconds
+    // let date = moment(input, 'mm:ss')
+    // console.log(date)
+    // let durString = 5
     return durString
   }
 
@@ -347,7 +350,7 @@ class Songs extends Component {
                 sliderStyle={{marginBottom: "36px"}}
                 min={1} max={7} step={1}
                 value={this.state.editSongResponse}
-                onChange={value => this.handleSliderChange(value, "editSongResponse")}
+                onChange={(event, value) => this.handleSliderChange(event, value, "editSongResponse")}
               />
             </label>
           </form>
@@ -399,7 +402,7 @@ class Songs extends Component {
             <Slider
               min={1} max={1500}
               value={this.state.formSongDuration}
-              onChange={value => this.handleSliderChange(value, "formSongDuration")}
+              onChange={(event, value) => this.handleSliderChange(event, value, "formSongDuration")}
             />
 
             <p style={{marginBottom: '.5em'}}>
@@ -408,7 +411,7 @@ class Songs extends Component {
             <Slider
               min={1} max={7} step={1}
               value={this.state.formSongIntensity}
-              onChange={value => this.handleSliderChange(value, "formSongIntensity")}
+              onChange={(event, value) => this.handleSliderChange(event, value, "formSongIntensity")}
             />
 
             <p style={{marginBottom: '.5em'}}>
@@ -417,7 +420,7 @@ class Songs extends Component {
             <Slider
               min={1} max={7} step={1}
               value={this.state.formSongResponse}
-              onChange={value => this.handleSliderChange(value, "formSongResponse")}
+              onChange={(event, value) => this.handleSliderChange(event, value, "formSongResponse")}
             />
           </form>
           <RaisedButton

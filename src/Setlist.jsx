@@ -129,7 +129,7 @@ class Setlist extends Component {
     doc.save(filename)
   }
 
-  debWritePDF = debounce(()=>{this.savePDF(this.writePDF())}, 1000, true)
+  debWritePDF = debounce(()=>{this.savePDF(this.createPDF())}, 1000, true)
 
   driveUpload(){
     let upload_url = 'https://www.googleapis.com/upload/drive/v2?uploadType=media'
@@ -216,13 +216,13 @@ class Setlist extends Component {
             style={{marginBottom: "1rem"}}
             onClick={()=>this.debWritePDF()} label="Download Setlist"
           />
-          <RaisedButton
+        {/*}<RaisedButton
             primary={true}
             width={"90%"}
             style={{marginBottom: "1rem"}}
             onClick={()=>this.debDriveUpload()}
             label="Export to Google Drive"
-          />
+          /> */}
         </div>
       )
     }

@@ -12,6 +12,10 @@ const style = {
   marginBottom: '.5rem',
   backgroundColor: 'rgba(256, 256, 256, 0.8)',
   cursor: 'move',
+  userSelect: "none",
+  MozUserSelect:'none',
+  WebkitUserSelect:'none',
+  msUserSelect:'none',
 };
 
 const cardSource = {
